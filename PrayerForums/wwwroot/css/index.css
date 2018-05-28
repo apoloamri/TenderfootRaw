@@ -2,7 +2,7 @@
 
 #preview {
     height: 700px;
-    background-image: url('/images/preview.jpg');
+    background-image: url('../images/preview.jpg');
     background-size: cover;
     position: relative;
     top: -50px;

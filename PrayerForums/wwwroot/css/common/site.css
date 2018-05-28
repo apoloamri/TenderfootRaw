@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway');
+@import url('https://fonts.googleapis.com/css?family=Bowlby+One+SC');
 
 a {
     text-decoration: none;
@@ -12,13 +13,15 @@ body {
     margin: auto;
 }
 
-input {
+input, textarea {
     background-color: transparent;
     border: 1px solid;
     border-color: #d2691e;
+    font-family: 'Raleway', sans-serif;
     padding: 15px;
     margin: 10px 0px;
     width: 100%;
+    resize: none;
 }
 
 button {
@@ -104,19 +107,6 @@ footer {
         transform: scale(1.05);
     }
 
-    footer .row:after {
-        content: "";
-        display: table;
-        clear: both;
-    }
-
-    footer .column {
-        float: left;
-        width: 30%;
-        padding: 10px;
-        height: 300px;
-    }
-
     footer #footerContent {
         padding: 30px;
     }
@@ -127,3 +117,20 @@ footer {
         text-align: center;
         padding: 5px;
     }
+
+#header {
+    height: 89px;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.column {
+    float: left;
+    width: 30%;
+    padding: 10px;
+    height: 300px;
+}

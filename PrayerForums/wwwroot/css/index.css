@@ -1,6 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css?family=Bowlby+One+SC');
-
-#preview {
+﻿#preview {
     height: 700px;
     background-image: url('../images/preview.jpg');
     background-size: cover;

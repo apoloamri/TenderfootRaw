@@ -1,0 +1,45 @@
+﻿body {
+    background-image: url('../images/signup.jpg');
+    background-size: cover;
+}
+
+#signUp, 
+#signIn {
+    background-color: #ffffff;
+    position: relative;
+    width: 50%;
+    padding: 45px;
+    margin: 45px;
+    box-shadow: 0px 0px 25px -8px;
+}
+
+    #signUp input, 
+    #signIn input {
+        width: 90%;
+    }
+
+    #signUp button, 
+    #signIn button {
+        margin: 10px 0px;
+        width: 90%;
+    }
+
+    #signUp a, 
+    #signIn a {
+        font-weight: bold;
+        color: #d2691e;
+        transition: 0.3s;
+    }
+
+        #signUp a:hover, 
+        #signIn a:hover {
+            color: #7a3d12;
+        }
+
+#logo {
+    background-image: url('../images/logo.png');
+    background-size: cover;
+    width: 100px;
+    height: 100px;
+    margin: 50px;
+}

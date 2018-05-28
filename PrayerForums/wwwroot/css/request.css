@@ -1,0 +1,52 @@
+﻿body {
+    background-image: url('../images/request.jpg');
+    background-size: cover;
+}
+
+#request {
+    background-color: #ffffff;
+    width: 90%;
+    margin: 45px 0px;
+    text-align: left;
+    overflow: hidden;
+    box-shadow: 0px 0px 25px -8px;
+    height: 1100px;
+    opacity: 0.98;
+}
+
+    #request h1 {
+        text-align: center;
+        color: #d2691e;
+    }
+
+    #request input {
+        left: 0;
+        width: 50%;
+        position: relative;
+    }
+
+    #request textarea {
+        width: 90%;
+        height: 300px;
+    }
+
+    #request button {
+        margin: 10px 0px;
+        width: 90%;
+    }
+
+#left {
+    padding: 20px;
+    width: 70%;
+    float: left;
+}
+
+#right {
+    background-color: #114859;
+    color: #ffffff;
+    padding: 20px;
+    right: 0;
+    width: 20%;
+    float: right;
+    height: 100%;
+}

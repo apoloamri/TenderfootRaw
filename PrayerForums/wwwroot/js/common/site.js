@@ -79,3 +79,9 @@ function GetParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 //GET QUERY STRING VALUE -- end
+
+//BUTTON LINK
+function VisitPage(url) {
+    window.location = url;
+}
+//BUTTON LINK -- end

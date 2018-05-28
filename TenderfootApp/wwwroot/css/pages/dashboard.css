@@ -1,0 +1,21 @@
+#dashboard a {
+    color: white;
+    line-height: 40px;
+}
+#dashboard a:hover {
+    text-decoration: underline;
+}
+
+#navigation {
+    float: left;
+    padding: 25px;
+}
+
+#content {
+    float: right;
+    background-color: white;
+    padding: 25px;
+    width: 75%;
+    height: 100%;
+    overflow-y: scroll;
+}

@@ -1,0 +1,8 @@
+﻿{
+  "DataNotFound": "Target data not found.",
+  "InvalidDuplicate": "{0} already exists.",
+  "InvalidInput": "Invalid input for {0}",
+  "RequiredField": "Please input your {0}.",
+  "SessionExpired": "Session expired or not existing.",
+  "Unauthorized": "Unauthorized"
+}

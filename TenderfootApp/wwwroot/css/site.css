@@ -1,0 +1,26 @@
+a {
+    text-decoration: none;
+}
+
+html {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+button {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+body {
+    background-color: gray;
+    margin: auto;
+}
+
+input {
+    padding: 5px;
+    margin: 10px;
+}

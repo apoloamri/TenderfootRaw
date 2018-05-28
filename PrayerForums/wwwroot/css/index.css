@@ -1,0 +1,85 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Bowlby+One+SC');
+
+#preview {
+    height: 700px;
+    background-image: url('/images/preview.jpg');
+    background-size: cover;
+    position: relative;
+    top: -50px;
+}
+
+    #preview div {
+        color: #ffffff;
+        font-size: 28px;
+        text-align: center;
+        margin: 0px 80px;
+        bottom: 0;
+        top: 35%;
+        position: relative;
+    }
+
+    #preview button {
+        background-color: #808080;
+        margin: 30px 0px;
+    }
+
+        #preview button:hover {
+            /*background: linear-gradient(#808080, #606060);*/
+            background-color: #606060;
+        }
+
+#events {
+    box-shadow: 0px 0px 25px -8px;
+    width: 70%;
+    top: -100px;
+    position: relative;
+    z-index: 998;
+    background-color: white;
+    overflow: hidden;
+}
+
+#upcoming {
+    float: left;
+    width: 55%;
+}
+
+#recent {
+    float: right;
+    width: 30%;
+    background-color: #114859;
+    color: #ffffff;
+    height: 100%;
+    position: absolute;
+    right: 0;
+}
+
+.innerEvents {
+    padding: 30px;
+}
+
+    .innerEvents div {
+        transition: 0.3s;
+        cursor: pointer;
+    }
+
+    .innerEvents div:hover {
+        transform: scale(1.05);
+    }
+
+    .innerEvents h1 {
+        color: #d2691e;
+        font-family: 'Bowlby One SC', cursive;
+    }
+
+    .innerEvents p {
+        text-align: left;
+    }
+
+#dailies {
+    width: 70%;
+    margin-bottom: 70px;
+}
+
+    #dailies h3 {
+        font-style: italic;
+    }

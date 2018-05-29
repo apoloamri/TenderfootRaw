@@ -38,7 +38,7 @@
 
 #upcoming {
     float: left;
-    width: 55%;
+    width: 50%;
 }
 
 #recent {
@@ -52,7 +52,7 @@
 }
 
 .innerEvents {
-    padding: 30px;
+    padding: 5%;
 }
 
     .innerEvents div {
@@ -81,3 +81,34 @@
     #dailies h3 {
         font-style: italic;
     }
+
+@media screen and (max-width: 1024px) {
+    #preview {
+        height: 400px;
+    }
+
+        #preview h2 {
+            margin: 0px;
+        }
+
+        #preview button {
+            margin-top: 0px;
+        }
+
+        #preview p {
+            display: none;
+        }
+
+    #upcoming {
+        width: 90%;
+    }
+
+        #upcoming p {
+            text-align: justify;
+            font-size: 12px;
+        }
+
+    #recent {
+        display: none;
+    }
+}

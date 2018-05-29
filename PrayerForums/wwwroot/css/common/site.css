@@ -65,15 +65,16 @@ header {
         padding: 30px;
     }
 
-    header nav a {
-        color: #ffffff;
-        top: 0;
-        padding: 0px 20px;
-        transition: 0.3s;
-    }
-        header nav a:hover {
-            color: #d2691e;
+        header nav a {
+            color: #ffffff;
+            top: 0;
+            padding: 20px 20px;
+            transition: 0.3s;
         }
+
+            header nav a:hover {
+                color: #d2691e;
+            }
 
 footer {
     background-color: #ededed;
@@ -108,14 +109,16 @@ footer {
     }
 
     footer #footerContent {
-        padding: 30px;
+        padding: 5%;
     }
 
     footer #credits {
         background-color: #140909;
         color: #ffffff;
         text-align: center;
-        padding: 5px;
+        padding: 3px;
+        font-size: 12px;
+
     }
 
 #header {
@@ -131,6 +134,34 @@ footer {
 .column {
     float: left;
     width: 30%;
-    padding: 10px;
+    padding: 1%;
     height: 300px;
+}
+
+@media screen and (max-width: 1024px) {
+    header {
+        position: absolute;
+    }
+
+        header nav {
+            padding: 0px;
+            right: 20px;
+            text-align: right;
+            position: absolute;
+        }
+
+            header nav a {
+                padding: 0px;
+                display: block;
+            }
+
+    .column {
+        float: none;
+        width: 100%;
+        margin-bottom: 30px;
+    }
+
+    input {
+        width: 70%;
+    }
 }

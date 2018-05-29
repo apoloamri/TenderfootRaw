@@ -29,14 +29,22 @@
         <div id="signUp">
             <h2>Sign up today!</h2>
             <p style="text-align: left;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-            <p>Already a member? Sign in <a href="signin.html">here</a>.</p>
-            <input type="text" placeholder="Email address" />
-            <input type="text" placeholder="Last name" />
-            <input type="text" placeholder="First name" />
-            <input type="text" placeholder="Username" />
-            <input type="password" placeholder="Password" />
-            <input type="password" placeholder="Confirm password" />
-            <button>SIGN IN</button>
+            <p>Already a member? <a href="signin.html">Sign in</a>.</p>
+            <input type="text" v-model="email" placeholder="Email address" />
+            <input type="text" v-model="lastname" placeholder="Last name" />
+            <input type="text" v-model="firstname" placeholder="First name" />
+            <input type="text" v-model="username" placeholder="Username" />
+            <input type="password" v-model="password" placeholder="Password" />
+            <button v-on:click="Register()">SIGN UP</button>
+            <div id="modalMessage" class="modal unshow" style="width:300px;bottom:inherit;padding:5%">
+                <div v-html="messages"></div>
+                <div v-if="valid == true">
+                    <button onclick="window.location='index.html'">Close</button>
+                </div>
+                <div v-else>
+                    <button onclick="HideModal()">Close</button>
+                </div>
+            </div>
         </div>
     </center>
     <footer>
@@ -69,10 +77,7 @@
         <div id="credits">- Tenderfoot 2018 -</div>
     </footer>
     <div id="modalShadow" class="unshow"></div>
-    <div id="indexModal" class="modal unshow" style="width:400px;height:200px;">
-        <center>
-            <button onclick="HideModal('indexModal')">Close</button>
-        </center>
-    </div>
+    <div id="modalLoading" class="modal unshow"></div>
+    <script src="js/signup.js"></script>
 </body>
 </html>

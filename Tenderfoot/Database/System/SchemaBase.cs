@@ -127,11 +127,11 @@ namespace Tenderfoot.Database.System
                 }
                 if (property.PropertyType.IsArray)
                 {
-                    this.Case.Where($"{{0}} = ANY({this.TableName}.{property.Name})", value);
+                    this.Case.WhereUniversal($"{{0}} = ANY({this.TableName}.{property.Name})", value);
                 }
                 else
                 {
-                    this.Case.Where($"{this.TableName}.{property.Name} = {{0}}", value);
+                    this.Case.WhereUniversal($"{this.TableName}.{property.Name} = {{0}}", value);
                 }
             }
         }

@@ -18,7 +18,7 @@ namespace Tenderfoot.Database
         [Default("Now()")]
         public virtual DateTime? insert_time { get; set; }
 
-        public List<string> GetColumns()
+        public string[] GetColumns()
         {
             return this
                 .GetType()
@@ -32,10 +32,10 @@ namespace Tenderfoot.Database
                     return false;
                 })
                 .Select(x => x.Name)
-                .ToList();
+                .ToArray();
         }
 
-        public List<string> GetInputColumns()
+        public string[] GetInputColumns()
         {
             return this
                 .GetType()
@@ -49,7 +49,7 @@ namespace Tenderfoot.Database
                     return false;
                 })
                 .Select(x => x.Name)
-                .ToList();
+                .ToArray();
         }
         
         public override bool HasAttribute(PropertyInfo property)

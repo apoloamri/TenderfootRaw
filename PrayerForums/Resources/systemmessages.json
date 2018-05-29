@@ -1,5 +1,6 @@
 ﻿{
   "DataNotFound": "Target data not found.",
+  "InvalidActivation": "Invalid activation key.",
   "InvalidDuplicate": "{0} already exists.",
   "InvalidInput": "Invalid input for {0}",
   "RequiredField": "{0} is a required input.",

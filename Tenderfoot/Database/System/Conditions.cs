@@ -114,12 +114,12 @@ namespace Tenderfoot.Database.System
             this.ColumnCount++;
         }
 
-        public void Where(string where, object value)
+        public void WhereUniversal(string where, object value)
         {
-            this.Where(Operator.AND, where, value);
+            this.WhereUniversal(Operator.AND, where, value);
         }
 
-        public void Where(Operator? oper, string where, object value)
+        public void WhereUniversal(Operator? oper, string where, object value)
         {
             if (value == null)
             {

@@ -6,7 +6,16 @@
     position: fixed;
     left: 0;
     top: 0;
-    z-index: 998;
+    z-index: 500;
+}
+
+#modalLoading {
+    background: url('../../images/loading.gif');
+    background-size: cover;
+    box-shadow: none;
+    width: 100px;
+    height: 100px;
+    z-index: 600;
 }
 
 .modal {
@@ -14,11 +23,11 @@
     box-shadow: 0px 0px 15px 1px #000000;
     margin: auto;
     position: fixed;
-    top:0;
+    top: 0;
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 999;
+    z-index: 700;
 }
 
 .unshow {

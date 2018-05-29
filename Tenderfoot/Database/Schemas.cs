@@ -44,7 +44,7 @@ namespace Tenderfoot.Database
                 columns.Case.AddColumns(columns._(x => x.column_name));
 
                 var currentColumns = columns.Select.Entities?.Select(x => x.column_name)?.ToList();
-                var entityColumns = newSchema.Entity.GetColumns();
+                var entityColumns = newSchema.Entity.GetColumns()?.ToList();
 
                 if (CompareLists.UnorderedEqual(entityColumns, currentColumns))
                 {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using Tenderfoot.Mvc.System;
 using Tenderfoot.TfSystem;
 using Tenderfoot.TfSystem.Diagnostics;
@@ -101,8 +102,14 @@ namespace Tenderfoot.Mvc
                 return;
             }
 
-            foreach (var property in model.GetType().GetProperties())
+            var properties = model.GetType().GetProperties();
+            foreach (PropertyInfo property in properties)
             {
+                if (property.GetCustomAttribute<InputAttribute>() == null)
+                {
+                    continue;
+                }
+
                 if (property.PropertyType.GetConstructor(Type.EmptyTypes) != null &&
                     !property.PropertyType.GetType().IsAbstract)
                 {

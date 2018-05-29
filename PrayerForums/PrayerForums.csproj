@@ -12,4 +12,8 @@
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Tenderfoot\Tenderfoot.csproj" />
+  </ItemGroup>
+
 </Project>

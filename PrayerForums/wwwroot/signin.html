@@ -24,6 +24,10 @@
             <input type="password" placeholder="Password" />
             <button>SIGN UP</button>
             <p>Don't have an account yet? <a href="signup.html">Sign up</a>.</p>
+            <div id="modalMessage" class="modal unshow" style="width:300px;bottom:inherit;padding:5%">
+                <div v-html="messages"></div>
+                <button onclick="HideModal()">Close</button>
+            </div>
         </div>
     </center>
     <div id="modalShadow" class="unshow"></div>
@@ -32,5 +36,8 @@
             <button onclick="HideModal('indexModal')">Close</button>
         </center>
     </div>
+    <div id="modalShadow" class="unshow"></div>
+    <div id="modalLoading" class="modal unshow"></div>
+    <script src="js/signin.js"></script>
 </body>
 </html>

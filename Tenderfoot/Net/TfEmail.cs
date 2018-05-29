@@ -13,7 +13,7 @@ namespace Tenderfoot.Net
 {
     public static class TfEmail
     {
-        public static void Send(string mailTo, string emailFile, Dictionary<string, object> items)
+        public static void Send(string emailFile, string mailTo, Dictionary<string, object> items)
         {
             try
             {

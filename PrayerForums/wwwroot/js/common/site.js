@@ -38,7 +38,7 @@ var underRequest = false;
 function DisplayMessages(object) {
     var output = '';
     for (var property in object) {
-        output += object[property] + '\n';
+        output += '<p>' + object[property] + '</p>';
     }
     return output;
 }

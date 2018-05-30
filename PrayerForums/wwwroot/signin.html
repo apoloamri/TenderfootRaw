@@ -20,10 +20,10 @@
         <div id="signIn">
             <h2>SIGN IN</h2>
             <p style="text-align: left;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-            <input type="text" placeholder="Username" />
-            <input type="password" placeholder="Password" />
-            <button>SIGN UP</button>
-            <p>Don't have an account yet? <a href="signup.html">Sign up</a>.</p>
+            <input v-model="username" type="text" placeholder="Username" />
+            <input v-model="password" type="password" placeholder="Password" />
+            <button v-on:click="Login()">SIGN UP</button>
+            <p>Don't have an account yet? <a href="signup.html">Sign In</a>.</p>
             <div id="modalMessage" class="modal unshow" style="width:300px;bottom:inherit;padding:5%">
                 <div v-html="messages"></div>
                 <button onclick="HideModal()">Close</button>

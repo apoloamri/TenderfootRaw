@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection;
 using Tenderfoot.TfSystem;
 
@@ -32,6 +33,10 @@ namespace Tenderfoot.Mvc
         public HttpMethod Method { get; set; }
         public bool Mapping => this.Method == HttpMethod.GET;
         public bool Handling => this.Method != HttpMethod.GET;
+        public bool IsGet => this.Method == HttpMethod.GET;
+        public bool IsPost => this.Method == HttpMethod.POST;
+        public bool IsPut => this.Method == HttpMethod.PUT;
+        public bool IsDelete => this.Method == HttpMethod.DELETE;
         public bool Stop { get; private set; }
         public List<string> InvalidFields { get; set; } = new List<string>();
         
@@ -44,6 +49,8 @@ namespace Tenderfoot.Mvc
         [Output]
         [ValidateInput(InputType.All, 100)]
         public virtual string SessionId { get; set; }
+
+        public string SessionIdValue => Encryption.Decrypt(this.SessionId);
 
         public virtual bool HasLibrary => false;
         public virtual void BeforeStartUp() { }
@@ -61,6 +68,33 @@ namespace Tenderfoot.Mvc
                 }
             }
             return true;
+        }
+
+        public bool IsValidRequireInputs(HttpMethod? method = null)
+        {
+            var stringList = new List<string>();
+            var properties = this.GetType().GetProperties();
+
+            foreach (var property in properties)
+            {
+                var attribute = property.GetCustomAttribute<RequireInputAttribute>();
+                if (attribute != null)
+                {
+                    if (method == null)
+                    {
+                        stringList.Add(property.Name);
+                    }
+                    else
+                    {
+                        var requireInput = attribute as RequireInputAttribute;
+                        if (requireInput.Method.Contains(method.Value))
+                        {
+                            stringList.Add(property.Name);
+                        }
+                    }
+                }
+            }
+            return this.IsValid(stringList.ToArray());
         }
 
         public bool IsValidSession()

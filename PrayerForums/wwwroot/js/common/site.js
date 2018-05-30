@@ -4,16 +4,16 @@ var apiUrl = "http://localhost:60400/";
 
 //REQUEST FUNCTIONS
 function Get(url, data, ignoreWait, callback = null, error = null) {
-    CallAjax('GET', url, data, ignoreWait, callback, error);
+    CallAjax("GET", url, data, ignoreWait, callback, error);
 }
 function Post(url, data, ignoreWait, callback = null, error = null) {
-    CallAjax('POST', url, data, ignoreWait, callback, error);
+    CallAjax("POST", url, data, ignoreWait, callback, error);
 }
 function Put(url, data, ignoreWait, callback = null, error = null) {
-    CallAjax('PUT', url, data, ignoreWait, callback, error);
+    CallAjax("PUT", url, data, ignoreWait, callback, error);
 }
 function Delete(url, data, ignoreWait, callback = null, error = null) {
-    CallAjax('DELETE', url, data, ignoreWait, callback, error);
+    CallAjax("DELETE", url, data, ignoreWait, callback, error);
 }
 function CallAjax(type, url, data, ignoreWait, callback = null, error = null) {
     if (underRequest && !ignoreWait) {
@@ -23,8 +23,8 @@ function CallAjax(type, url, data, ignoreWait, callback = null, error = null) {
     $.ajax({
         type: type,
         url: apiUrl + url,
-        dataType: 'json',
-        contentType: 'application/json; charset=utf-8',
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
         data: data,
         success: callback,
         error: error,
@@ -36,9 +36,15 @@ var underRequest = false;
 
 //DISPLAY MESSAGES FROM RESPONSE
 function DisplayMessages(object) {
-    var output = '';
+    var output = "";
+    var items = [];
     for (var property in object) {
-        output += '<p>' + object[property] + '</p>';
+        var value = object[property];
+        if (items.includes(value)) {
+            continue;
+        }
+        items.push(value);
+        output += "<p>" + value + "</p>";
     }
     return output;
 }
@@ -54,10 +60,10 @@ function SetCookie(cname, cvalue, exdays) {
 function GetCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
+    var ca = decodedCookie.split(";");
     for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
-        while (c.charAt(0) === ' ') {
+        while (c.charAt(0) === " ") {
             c = c.substring(1);
         }
         if (c.indexOf(name) === 0) {
@@ -65,6 +71,14 @@ function GetCookie(cname) {
         }
     }
     return "";
+}
+function DeleteCookies() {
+    document.cookie
+        .split(";")
+        .forEach(function (c) {
+            document.cookie = c.replace(/^ +/, "")
+                .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        });
 }
 //COOKIES -- end
 
@@ -75,7 +89,7 @@ function GetParameterByName(name, url) {
     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
         results = regex.exec(url);
     if (!results) return null;
-    if (!results[2]) return '';
+    if (!results[2]) return "";
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 //GET QUERY STRING VALUE -- end

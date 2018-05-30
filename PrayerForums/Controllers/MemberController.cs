@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PrayerForums.Models.Member;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Tenderfoot.Mvc;
 
 namespace PrayerForums.Controllers
@@ -22,6 +18,20 @@ namespace PrayerForums.Controllers
         public JsonResult ActivateMember()
         {
             this.Initiate<ActivateMemberModel>(false);
+            return this.Conclude();
+        }
+
+        [HttpGet("login")]
+        public JsonResult CheckLoginMember()
+        {
+            this.Initiate<LoginMemberModel>(false);
+            return this.Conclude();
+        }
+
+        [HttpPost("login")]
+        public JsonResult LoginMember()
+        {
+            this.Initiate<LoginMemberModel>(false);
             return this.Conclude();
         }
     }

@@ -3,6 +3,7 @@
   "InvalidActivation": "Invalid activation key.",
   "InvalidDuplicate": "{0} already exists.",
   "InvalidInput": "Invalid input for {0}",
+  "InvalidUsernamePassword": "Invalid username and/or password.",
   "RequiredField": "{0} is a required input.",
   "SessionExpired": "Session expired or not existing.",
   "Unauthorized": "Unauthorized"

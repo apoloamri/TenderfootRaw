@@ -17,11 +17,12 @@
 <body>
     <header>
         <div></div>
-        <nav>
+        <nav id="navigation">
             <a href="index.html">HOME</a>
             <a href="community.html">COMMUNITY</a>
             <a href="contact.html">CONTACT</a>
-            <a href="signup.html">SIGN UP</a>
+            <span v-if="isLoggedIn == true"><a href="#" onclick="Logout()">LOG OUT</a></span>
+            <span v-else><a href="signup.html">SIGN UP</a></span>
         </nav>
     </header>
     <div id="header"></div>
@@ -78,6 +79,7 @@
     </footer>
     <div id="modalShadow" class="unshow"></div>
     <div id="modalLoading" class="modal unshow"></div>
+    <script src="js/main.js"></script>
     <script src="js/signup.js"></script>
 </body>
 </html>

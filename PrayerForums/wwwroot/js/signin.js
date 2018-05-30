@@ -34,6 +34,25 @@
                     ShowModal("modalMessage");
                 }
             );
+        },
+        Login: function () {
+            var that = this;
+            ShowModal("modalLoading");
+            Post(
+                url = "member/login",
+                data = that.GetData(),
+                ignoreWait = true,
+                callback = function (data) {
+                    SetCookie("session_id", data.session_id, 1);
+                    SetCookie("session_key", data.session_key, 1);
+                    window.location = "community.html";
+                },
+                error = function (data) {
+                    var response = data.responseJSON;
+                    that.messages = DisplayMessages(response.messages);
+                    ShowModal("modalMessage");
+                }
+            );
         }
     },
     created: function () {

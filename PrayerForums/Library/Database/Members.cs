@@ -45,6 +45,6 @@ namespace PrayerForums.Library.Database
 
         [NotNull]
         [Default("0")]
-        public int active { get; set; }
+        public int? active { get; set; }
     }
 }

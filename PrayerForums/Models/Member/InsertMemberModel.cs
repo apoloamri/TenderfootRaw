@@ -9,7 +9,7 @@ namespace PrayerForums.Models.Member
     {
         [Input]
         public Members Member { get; set; } = new Members();
-
+        
         public override IEnumerable<ValidationResult> Validate()
         {
             if (this.IsValid(this.Member.GetInputColumns()))
@@ -18,7 +18,7 @@ namespace PrayerForums.Models.Member
                 yield return this.Library.ValidateUsername();
             }
         }
-
+        
         public override void HandleModel()
         {
             this.Library.InsertMember();

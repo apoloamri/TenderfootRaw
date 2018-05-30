@@ -17,11 +17,12 @@
 <body>
     <header>
         <div></div>
-        <nav>
+        <nav id="navigation">
             <a href="index.html">HOME</a>
             <a href="community.html">COMMUNITY</a>
             <a href="contact.html">CONTACT</a>
-            <a href="signup.html">SIGN UP</a>
+            <span v-if="isLoggedIn == true"><a href="#" onclick="Logout()">LOG OUT</a></span>
+            <span v-else><a href="signup.html">SIGN UP</a></span>
         </nav>
     </header>
     <div id="preview">
@@ -89,5 +90,6 @@
             <button onclick="HideModal('indexModal')">Close</button>
         </center>
     </div>
+    <script src="js/main.js"></script>
 </body>
 </html>

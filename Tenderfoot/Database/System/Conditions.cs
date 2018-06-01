@@ -27,7 +27,20 @@ namespace Tenderfoot.Database.System
         {
             this.Limit = limit;
         }
-        
+
+        public int? Offset { get; private set; }
+
+        public void OffsetBy(int offset)
+        {
+            this.Offset = offset;
+        }
+
+        public void Paginate(int page, int itemCount)
+        {
+            this.Limit = itemCount;
+            this.Offset = (page == 1) ? 0 : (page - 1) * itemCount;
+        }
+
         /// <summary>
         /// Adds an order to be followed when the result is read.
         /// </summary>
@@ -110,6 +123,8 @@ namespace Tenderfoot.Database.System
                 value = Encryption.Encrypt(Convert.ToString(value), true);
             }
 
+            value = ConvertToSafe.Convert(value);
+            
             this.Parameters.Add(columnParameter, value);
             this.ColumnCount++;
         }
@@ -130,7 +145,7 @@ namespace Tenderfoot.Database.System
             var statement = string.Format(where, this.Param + columnParameter) + " ";
 
             this.AddWhere(oper, statement);
-            this.Parameters.Add(columnParameter, value);
+            this.Parameters.Add(columnParameter, ConvertToSafe.Convert(value));
             this.ColumnCount++;
         }
 

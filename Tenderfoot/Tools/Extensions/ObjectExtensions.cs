@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Tenderfoot.Tools.Extensions
@@ -19,6 +20,12 @@ namespace Tenderfoot.Tools.Extensions
             return o is IDictionary &&
                    o.GetType().IsGenericType &&
                    o.GetType().GetGenericTypeDefinition().IsAssignableFrom(typeof(Dictionary<,>));
+        }
+
+        public static bool IsNullableEnum(this Type type)
+        {
+            Type underlying = Nullable.GetUnderlyingType(type);
+            return (underlying != null) && underlying.IsEnum || type.IsEnum;
         }
     }
 }

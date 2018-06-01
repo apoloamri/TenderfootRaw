@@ -12,11 +12,11 @@ namespace PrayerForums.Models.Member
     {
         public Members Member { get; set; }
 
-        public ValidationResult ValidateEmail()
+        internal ValidationResult ValidateEmail()
         {
             var members = _Schemas.Members;
             members.Entity.email = this.Member.email;
-            members.Entity.active = (int)EnumActive.Active;
+            members.Entity.active = EnumActive.Active;
             if (members.Count > 0)
             {
                 return TfValidationResult.Compose(
@@ -27,11 +27,11 @@ namespace PrayerForums.Models.Member
             return null;
         }
 
-        public ValidationResult ValidateUsername()
+        internal ValidationResult ValidateUsername()
         {
             var members = _Schemas.Members;
             members.Entity.username = this.Member.username;
-            members.Entity.active = (int)EnumActive.Active;
+            members.Entity.active = EnumActive.Active;
             if (members.Count > 0)
             {
                 return TfValidationResult.Compose(
@@ -42,7 +42,7 @@ namespace PrayerForums.Models.Member
             return null;
         }
 
-        public void InsertMember()
+        internal void InsertMember()
         {
             this.Member.activation_key = KeyGenerator.GetUniqueKey(100);
             var members = _Schemas.Members;
@@ -50,7 +50,7 @@ namespace PrayerForums.Models.Member
             members.Insert();
         }
 
-        public void SendEmail()
+        internal void SendEmail()
         {
             TfEmail.Send(
                 "MemberRegister",

@@ -203,7 +203,8 @@ namespace Tenderfoot.Database.System
                 type == typeof(int) ||
                 type == typeof(int?) ||
                 type == typeof(int[]) ||
-                type == typeof(int?[]))
+                type == typeof(int?[]) ||
+                type.IsNullableEnum())
             {
                 return
                     !hasSerial ?
@@ -427,5 +428,24 @@ namespace Tenderfoot.Database.System
         public string TableName { get; set; }
         public string OnString { get; set; }
         public Type EntityType { get; set; }
+    }
+
+    public static class ConvertToSafe
+    {
+        public static object Convert(object obj)
+        {
+            if (obj is bool || obj is bool?)
+            {
+                var val = obj as bool?;
+                return (val ?? false) ? 1 : 0;
+            }
+
+            if (obj is Enum)
+            {
+                return (int)obj;
+            }
+
+            return obj;
+        }
     }
 }

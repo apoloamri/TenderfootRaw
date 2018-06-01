@@ -61,7 +61,7 @@
             </table>
         </div>
         <h1>Prayer Wall</h1>
-        <div>
+        <div id="prayerWall">
             <table>
                 <thead>
                     <tr>
@@ -70,19 +70,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr v-for="item in result">
                         <td>
-                            Hello World prayer request.
-                            <span>January 1, 2018</span>
+                            {{item.request}}
+                            <span>{{item.insert_time}}</span>
                         </td>
-                        <td>Paolo Macaraig</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Less ticket from Vision.
-                            <span>January 1, 2018</span>
-                        </td>
-                        <td>Paolo Macaraig</td>
+                        <td>{{item.firstname}} {{item.lastname}}</td>
                     </tr>
                     <tr>
                         <td colspan="3" class="button">
@@ -129,5 +122,6 @@
         </center>
     </div>
     <script src="js/main.js"></script>
+    <script src="js/community.js"></script>
 </body>
 </html>

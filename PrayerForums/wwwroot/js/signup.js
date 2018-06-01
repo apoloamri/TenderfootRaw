@@ -27,7 +27,7 @@
             Post(
                 url = "member",
                 data = that.GetData(),
-                ignoreWait = true,
+                ignoreWait = false,
                 callback = function (data) {
                     that.messages = "A confirmation email was sent to your email account.";
                     that.valid = true;

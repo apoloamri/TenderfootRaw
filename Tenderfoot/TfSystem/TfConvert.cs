@@ -18,6 +18,11 @@ namespace Tenderfoot.TfSystem
 
             Type type = Nullable.GetUnderlyingType(conversion) ?? conversion;
 
+            if (type.IsEnum)
+            {
+                return Enum.Parse(type, value.ToString());
+            }
+            
             return (value == null) ? null : Convert.ChangeType(value, type);
         }
 

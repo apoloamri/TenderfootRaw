@@ -38,9 +38,9 @@
             <input type="password" v-model="password" placeholder="Password" />
             <button v-on:click="Register()">SIGN UP</button>
             <div id="modalMessage" class="modal unshow" style="width:300px;bottom:inherit;padding:5%">
-                <div v-html="messages"></div>
+                <p v-html="messages"></p>
                 <div v-if="valid == true">
-                    <button onclick="window.location='index.html'">Close</button>
+                    <button onclick="window.location='index.html'">Return to Homepage</button>
                 </div>
                 <div v-else>
                     <button onclick="HideModal()">Close</button>

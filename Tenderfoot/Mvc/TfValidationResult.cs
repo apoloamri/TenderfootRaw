@@ -75,6 +75,8 @@ namespace Tenderfoot.Mvc
                     return BaseValidationResult.ValidateString(value, memberNames);
                 case InputType.URL:
                     return BaseValidationResult.ValidateURL(value, memberNames);
+                case InputType.Enum:
+                    return BaseValidationResult.ValidateEnum(value, memberNames);
                 default:
                     return null;
             }

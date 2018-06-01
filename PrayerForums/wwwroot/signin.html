@@ -22,10 +22,10 @@
             <p style="text-align: left;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
             <input v-model="username" type="text" placeholder="Username" />
             <input v-model="password" type="password" placeholder="Password" />
-            <button v-on:click="Login()">SIGN UP</button>
-            <p>Don't have an account yet? <a href="signup.html">Sign In</a>.</p>
+            <button v-on:click="Login()">SIGN IN</button>
+            <p>Don't have an account yet? <a href="signup.html">Sign Up</a>.</p>
             <div id="modalMessage" class="modal unshow" style="width:300px;bottom:inherit;padding:5%">
-                <div v-html="messages"></div>
+                <p v-html="messages"></p>
                 <button onclick="HideModal()">Close</button>
             </div>
         </div>

@@ -79,6 +79,11 @@ namespace Tenderfoot.Database
                 $"LIMIT {this.Case.Limit}" :
                 string.Empty;
 
+            string offset =
+                this.Case.Offset.HasValue ?
+                $"OFFSET {this.Case.Offset}" :
+                string.Empty;
+
             foreach (var property in typeof(T).GetProperties())
             {
                 if (property.GetCustomAttribute<EncryptAttribute>(false) != null &&
@@ -89,7 +94,7 @@ namespace Tenderfoot.Database
             }
 
             return new Query(
-                $"{Operations.SELECT} {columns} FROM {TableName} {join} {this.GetWhere()} {order} {limit};",
+                $"{Operations.SELECT} {columns} FROM {TableName} {join} {this.GetWhere()} {order} {limit} {offset};",
                 this.Case.Parameters
                 );
         }

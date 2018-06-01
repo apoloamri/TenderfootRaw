@@ -24,6 +24,11 @@ input, textarea {
     resize: none;
 }
 
+    input[type=radio], input[type=checkbox] {
+        width: inherit!important;
+        margin-right: 10px;
+    }
+
 button {
     background-color: #d2691e;
     border-radius: 5px;

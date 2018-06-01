@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace Tenderfoot.Mvc.System
 {
@@ -28,6 +30,21 @@ namespace Tenderfoot.Mvc.System
                 @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$", 
                 value, 
                 memberNames);
+        }
+
+        public static ValidationResult ValidateEnum(object value, string[] memberNames)
+        {
+            var list = new List<int>();
+            foreach (var item in Enum.GetValues(value.GetType()))
+            {
+                list.Add((int)item);
+            }
+
+            if (!list.Contains((int)value))
+            {
+                TfValidationResult.Compose("InvalidInput", memberNames);
+            }
+            return null;
         }
 
         public static ValidationResult ValidateDateTime(object value, string[] memberNames)

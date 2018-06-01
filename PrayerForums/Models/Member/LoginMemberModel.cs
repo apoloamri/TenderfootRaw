@@ -1,12 +1,11 @@
-﻿using PrayerForums.Library;
-using PrayerForums.Library.Database;
+﻿using PrayerForums.Library.Database;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Tenderfoot.Mvc;
 
 namespace PrayerForums.Models.Member
 {
-    public class LoginMemberModel : TfModel
+    public class LoginMemberModel : TfModel<LoginMemberBase>
     {
         [Input]
         [RequireInput(HttpMethod.POST)]
@@ -26,7 +25,7 @@ namespace PrayerForums.Models.Member
                 yield return this.ValidateSession();
                 if (this.IsValidSession())
                 {
-                    yield return this.ValidateUsernameSession();
+                    yield return this.Library.ValidateUsernameSession(this.SessionIdValue);
                 }
             }
 
@@ -34,49 +33,14 @@ namespace PrayerForums.Models.Member
             {
                 if (this.IsValidRequireInputs(HttpMethod.POST))
                 {
-                    yield return this.ValidateUsernamePassword();
+                    yield return this.Library.ValidateUsernamePassword();
                 }
             }
         }
-
-        private ValidationResult ValidateUsernameSession()
-        {
-            var members = _Schemas.Members;
-            members.Entity.username = this.SessionIdValue;
-            members.Entity.active = (int)EnumActive.Active;
-            if (members.Count == 0)
-            {
-                return TfValidationResult.Compose(
-                    "SessionExpired",
-                    nameof(this.Username),
-                    nameof(this.Password));
-            }
-            return null;
-        }
-
-        private ValidationResult ValidateUsernamePassword()
-        {
-            var members = _Schemas.Members;
-            members.Entity.username = this.Username;
-            members.Entity.password = this.Password;
-            if (members.Count == 0)
-            {
-                return TfValidationResult.Compose(
-                    "InvalidUsernamePassword", 
-                    nameof(this.Username), 
-                    nameof(this.Password));
-            }
-            return null;
-        }
-
+        
         public override void MapModel()
         {
-            var members = _Schemas.Members;
-            members.Entity.username = this.SessionIdValue;
-            members.Entity.active = (int)EnumActive.Active;
-            var member = members.Select.Entity;
-            this.Member = member;
-            this.Member.password = null;
+            this.Library.GetMember(this.SessionIdValue);
         }
 
         public override void HandleModel()

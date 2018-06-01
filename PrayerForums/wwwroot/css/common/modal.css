@@ -6,7 +6,7 @@
     position: fixed;
     left: 0;
     top: 0;
-    z-index: 1000;
+    z-index: 1000 !important;
 }
 
 #modalLoading {
@@ -15,7 +15,7 @@
     box-shadow: none;
     width: 100px;
     height: 100px;
-    z-index: 1100;
+    z-index: 1100 !important;
 }
 
 .modal {
@@ -27,7 +27,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 1200;
+    z-index: 1200 !important;
 }
 
 .unshow {

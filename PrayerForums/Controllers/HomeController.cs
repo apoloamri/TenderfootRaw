@@ -10,7 +10,7 @@ namespace TenderfootApp.Controllers
         [HttpGet]
         public JsonResult GetHome()
         {
-            this.Initiate<HomeModel>();
+            this.Initiate<HomeModel>(false);
             return this.Conclude();
         }
     }

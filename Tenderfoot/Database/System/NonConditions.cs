@@ -42,13 +42,9 @@ namespace Tenderfoot.Database.System
                 .Where(x => x.Value != null)
                 .ToDictionary(x => x.Key, x => x.Value);
 
-            foreach (var property in this.Parameters)
+            foreach (var property in this.Parameters.ToList())
             {
-                if (property.Value is bool || property.Value is bool?)
-                {
-                    var value = property.Value as bool?;
-                    this.Parameters[property.Key] = (value ?? false) ? 1 : 0;
-                }
+                this.Parameters[property.Key] = ConvertToSafe.Convert(property.Value);
             }
         }
     }

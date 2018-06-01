@@ -27,22 +27,39 @@
     </header>
     <div id="header"></div>
     <center>
-        <div id="request" class="row">
-            <div id="left">
-                <h1>Request a Prayer</h1>
-                <p>Thank you for your engagement with our online community. The purpose of the prayer wall is to allow users to pray as a community and connect around their prayer needs. Though we know that prayer and conversations sometimes travel away from the immediate topic, we are committed to maintaining an open, welcoming, and fruitful space for prayer for anyone who wishes to participate.</p>
-                <input v-model="lastname" type="text" placeholder="Last name" />
-                <input v-model="firstname" type="text" placeholder="First name" />
-                <input v-model="email" type="text" placeholder="Email address" />
-                <p>And this is the confidence that we have toward him, that if we ask anything according to his will he hears us. And if we know that he hears us in whatever we ask, we know that we have the requests that we have asked of him. (1 John 5:14-15)</p>
-                <p>Whatever your prayer need, finding peace of mind provides a foundation of strength to face any situation. Enter your request for prayer here...</p>
-                <center><textarea placeholder="Your request here..."></textarea></center>
-                <p>Do not be anxious about anything, but in everything by prayer and supplication with thanksgiving let your requests be made known to God. (Philippians 4:6)</p>
-                <center><button>Submit Prayer Request</button></center>
+        <div id="request">
+            <div id="innerRequest" class="row">
+                <div id="left">
+                    <h1>Request a Prayer</h1>
+                    <p>Thank you for your engagement with our online community. The purpose of the prayer wall is to allow users to pray as a community and connect around their prayer needs. Though we know that prayer and conversations sometimes travel away from the immediate topic, we are committed to maintaining an open, welcoming, and fruitful space for prayer for anyone who wishes to participate.</p>
+                    <input v-model="lastname" type="text" placeholder="Last name" />
+                    <input v-model="firstname" type="text" placeholder="First name" />
+                    <input v-model="email" type="text" placeholder="Email address" />
+                    <p>And this is the confidence that we have toward him, that if we ask anything according to his will he hears us. And if we know that he hears us in whatever we ask, we know that we have the requests that we have asked of him. (1 John 5:14-15)</p>
+                    <p>Whatever your prayer need, finding peace of mind provides a foundation of strength to face any situation. Enter your request for prayer here...</p>
+                    <center><textarea v-model="request" placeholder="Your request here..."></textarea></center>
+                    <p>
+                        <input v-model="response" name="response" id="response1" type="radio" value="0" /><label for="response1">Keep my request private and let only the ministry respond to my request.</label><br />
+                        <input v-model="response" name="response" id="response2" type="radio" value="1" /><label for="response2">Share my request to the community and let anyone respond to my request.</label><br />
+                        <input v-model="sendEmail" id="sendEmail" type="checkbox" value="1" /><label for="sendEmail">It is okay for me to be contacted through email.</label><br />
+                    </p>
+                    <p>Do not be anxious about anything, but in everything by prayer and supplication with thanksgiving let your requests be made known to God. (Philippians 4:6)</p>
+                    <center><button v-on:click="SendRequest()">Submit Prayer Request</button></center>
+                </div>
+                <div id="right">
+                    <h3>Today's prayer</h3>
+                    <p>Dear Father, thank you for always being with us, for giving us a faith stronger than any fears. Amen.</p>
+                </div>
             </div>
-            <div id="right">
-                <h3>Today's prayer</h3>
-                <p>Dear Father, thank you for always being with us, for giving us a faith stronger than any fears. Amen.</p>
+            <div id="modalMessage" class="modal unshow" style="width:300px;bottom:inherit;padding:5%">
+                <div v-if="valid == true">
+                    <p>Your request has been sent, {{firstname}}.</p>
+                    <button onclick="window.location='community.html'">Go to the Community page</button>
+                </div>
+                <div v-else>
+                    <p v-html="messages"></p>
+                    <button onclick="HideModal()">Close</button>
+                </div>
             </div>
         </div>
     </center>
@@ -76,11 +93,7 @@
         <div id="credits">- Tenderfoot 2018 -</div>
     </footer>
     <div id="modalShadow" class="unshow"></div>
-    <div id="indexModal" class="modal unshow" style="width:400px;height:200px;">
-        <center>
-            <button onclick="HideModal('indexModal')">Close</button>
-        </center>
-    </div>
+    <div id="modalLoading" class="modal unshow"></div>
     <script src="js/main.js"></script>
     <script src="js/request.js"></script>
 </body>

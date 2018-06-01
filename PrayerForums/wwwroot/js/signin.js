@@ -23,7 +23,7 @@
             Post(
                 url = "member/activate",
                 data = that.GetData(),
-                ignoreWait = true,
+                ignoreWait = false,
                 callback = function (data) {
                     that.messages = "Your account is successfully activated.";
                     ShowModal("modalMessage");
@@ -41,7 +41,7 @@
             Post(
                 url = "member/login",
                 data = that.GetData(),
-                ignoreWait = true,
+                ignoreWait = false,
                 callback = function (data) {
                     SetCookie("session_id", data.session_id, 1);
                     SetCookie("session_key", data.session_key, 1);

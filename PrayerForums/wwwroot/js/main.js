@@ -22,7 +22,7 @@ var navigation = new Vue({
             Get(
                 url = "member/login",
                 data = that.GetData(),
-                ignoreWait = false,
+                ignoreWait = true,
                 callback = function (data) {
                     that.isLoggedIn = true;
                     if (typeof request !== "undefined") {

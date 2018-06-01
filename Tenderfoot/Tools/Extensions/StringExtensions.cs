@@ -110,5 +110,10 @@ namespace Tenderfoot.Tools.Extensions
             }
             return String.Format(newFormatString.ToString(), ValueDict.OrderBy(x => keyToInt[x.Key]).Select(x => x.Value).ToArray());
         }
+
+        public static string Truncate(this string value, int maxChars)
+        {
+            return value.Length <= maxChars ? value : value.Substring(0, maxChars) + "...";
+        }
     }
 }

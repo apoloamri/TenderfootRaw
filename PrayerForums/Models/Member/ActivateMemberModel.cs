@@ -31,7 +31,7 @@ namespace PrayerForums.Models.Member
         public override void HandleModel()
         {
             var members = _Schemas.Members;
-            members.Entity.active = (int)EnumActive.Active;
+            members.Entity.active = EnumActive.Active;
             members.Case.Where(members._(x => x.activation_key), Is.EqualTo, this.Key);
             members.Update();
             TfEmail.Send(

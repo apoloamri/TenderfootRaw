@@ -52,6 +52,10 @@ namespace Tenderfoot.Tools
                     
                     value = dynamicList;
                 }
+                else if (value.GetType().IsNullableEnum())
+                {
+                    value = (Enum)value;
+                }
                 
                 try
                 {

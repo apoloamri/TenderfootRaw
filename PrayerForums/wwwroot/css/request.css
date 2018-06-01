@@ -3,34 +3,34 @@
     background-size: cover;
 }
 
-#request {
+#innerRequest {
     background-color: #ffffff;
     width: 90%;
     margin: 45px 0px;
     text-align: left;
     overflow: hidden;
     box-shadow: 0px 0px 25px -8px;
-    height: 1100px;
+    height: 1250px;
     opacity: 0.98;
 }
 
-    #request h1 {
+    #innerRequest h1 {
         text-align: center;
         color: #d2691e;
     }
 
-    #request input {
+    #innerRequest input {
         left: 0;
         width: 50%;
         position: relative;
     }
 
-    #request textarea {
+    #innerRequest textarea {
         width: 90%;
         height: 300px;
     }
 
-    #request button {
+    #innerRequest button {
         margin: 10px 0px;
         width: 90%;
     }
@@ -52,7 +52,7 @@
 }
 
 @media screen and (max-width: 1024px) {
-    #request {
+    #innerRequest {
         overflow: scroll;
     }
     

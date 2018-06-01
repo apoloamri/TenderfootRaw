@@ -3,14 +3,8 @@ using Tenderfoot.Mvc;
 
 namespace PrayerForums.Library.Database
 {
-    public class Members : Entity
+    public class Requests : Entity
     {
-        [NotNull]
-        [Input]
-        [RequireInput(HttpMethod.POST)]
-        [ValidateInput(InputType.Email)]
-        public string email { get; set; }
-
         [NotNull]
         [Input]
         [RequireInput(HttpMethod.POST)]
@@ -26,24 +20,32 @@ namespace PrayerForums.Library.Database
         [NotNull]
         [Input]
         [RequireInput(HttpMethod.POST)]
-        [ValidateInput(InputType.String)]
-        public string username { get; set; }
+        [ValidateInput(InputType.Email)]
+        public string email { get; set; }
+
+        [NotNull]
+        [Text]
+        [Input]
+        [RequireInput(HttpMethod.POST)]
+        [ValidateInput(InputType.All)]
+        public string request { get; set; }
 
         [NotNull]
         [Input]
         [RequireInput(HttpMethod.POST)]
-        [ValidateInput(InputType.String)]
-        public string password { get; set; }
+        [ValidateInput(InputType.Enum)]
+        [Default("0")]
+        public EnumPublic? response { get; set; }
 
-        [Length(100)]
-        public string activation_key { get; set; }
+        [NotNull]
+        [Input]
+        [RequireInput(HttpMethod.POST)]
+        [ValidateInput(InputType.Enum)]
+        [Default("0")]
+        public EnumActive? send_email { get; set; }
 
         [NotNull]
         [Default("0")]
-        public EnumActive? active { get; set; }
-
-        [NotNull]
-        [Default("0")]
-        public EnumAdmin? admin { get; set; }
+        public EnumPrayerType? prayer_type { get; set; }
     }
 }

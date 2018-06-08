@@ -30,7 +30,7 @@
                 },
                 error = function (data) {
                     var response = data.responseJSON;
-                    that.messages = DisplayMessages(response.messages);
+                    that.messages = DisplayMessages(response.messages, true);
                     ShowModal("modalMessage");
                 }
             );
@@ -49,7 +49,7 @@
                 },
                 error = function (data) {
                     var response = data.responseJSON;
-                    that.messages = DisplayMessages(response.messages);
+                    that.messages = DisplayMessages(response.messages, true);
                     ShowModal("modalMessage");
                 }
             );

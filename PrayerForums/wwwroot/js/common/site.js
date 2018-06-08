@@ -3,6 +3,20 @@ var apiUrl = "http://localhost:60400/";
 //CONFIGURATIONS -- end
 
 //REQUEST FUNCTIONS
+function UploadFile(file, fileName, url, callback, error) {
+    var formData = new FormData();
+    formData.append("file", file);
+    formData.append("name", fileName);
+    $.ajax({
+        type: "POST",
+        url: apiUrl + url,
+        data: formData,
+        success: callback,
+        processData: false,
+        contentType: false,
+        error: error
+    });
+}
 function Get(url, data, ignoreWait, callback = null, error = null) {
     CallAjax("GET", url, data, ignoreWait, callback, error);
 }
@@ -35,7 +49,7 @@ var underRequest = false;
 //REQUEST FUNCTIONS -- end
 
 //DISPLAY MESSAGES FROM RESPONSE
-function DisplayMessages(object) {
+function DisplayMessages(object, isHtml = false) {
     var output = "";
     var items = [];
     for (var property in object) {
@@ -44,7 +58,13 @@ function DisplayMessages(object) {
             continue;
         }
         items.push(value);
-        output += "<p>" + value + "</p>";
+
+        if (isHtml) {
+            output += "<p>" + value + "</p>";
+        }
+        else {
+            output += value + "\n";
+        }
     }
     return output;
 }
@@ -99,3 +119,7 @@ function VisitPage(url) {
     window.location = url;
 }
 //BUTTON LINK -- end
+
+//PAGINATIONS
+
+//PAGINATIONS -- end

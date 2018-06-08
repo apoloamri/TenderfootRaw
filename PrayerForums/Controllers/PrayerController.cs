@@ -14,6 +14,20 @@ namespace PrayerForums.Controllers
             return this.Conclude();
         }
 
+        [HttpPost("reply")]
+        public JsonResult InsertReply()
+        {
+            this.Initiate<InsertReplyModel>(false);
+            return this.Conclude();
+        }
+
+        [HttpPost("praise")]
+        public JsonResult InsertPraise()
+        {
+            this.Initiate<InsertPraiseModel>(false);
+            return this.Conclude();
+        }
+
         [HttpGet("requests")]
         public JsonResult GetRequests()
         {
@@ -21,10 +35,24 @@ namespace PrayerForums.Controllers
             return this.Conclude();
         }
 
+        [HttpGet("praises")]
+        public JsonResult GetPraises()
+        {
+            this.Initiate<GetPraisesModel>(false);
+            return this.Conclude();
+        }
+
         [HttpGet("details")]
         public JsonResult GetDetails()
         {
             this.Initiate<GetDetailsModel>(false);
+            return this.Conclude();
+        }
+
+        [HttpGet("report")]
+        public JsonResult GetReport()
+        {
+            this.Initiate<GetReportModel>(false);
             return this.Conclude();
         }
     }

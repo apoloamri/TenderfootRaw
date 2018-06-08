@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace Tenderfoot.Database
 {
-    public class Schema<T> : SchemaBase<T> where T : Entity, new()
+    public class Schema<T> : SchemaBase<T> where T : TfEntity, new()
     {
         public Schema(string tableName) : base(tableName)
         {
@@ -26,7 +26,7 @@ namespace Tenderfoot.Database
         /// <param name="join">The type of relationship. May it be INNER, OUTER, LEFT or RIGHT.</param>
         /// <param name="schema">The schema to be related with.</param>
         /// <param name="columnOn">The columns will be used for relating the two schemas provided.</param>
-        public void Relate<Joined>(Join join, Schema<Joined> schema, params Relation[] columnOn) where Joined : Entity, new()
+        public void Relate<Joined>(Join join, Schema<Joined> schema, params Relation[] columnOn) where Joined : TfEntity, new()
         {
             var onString = new List<string>();
             
@@ -110,7 +110,7 @@ namespace Tenderfoot.Database
             return this.Entity;
         }
 
-        public NewT SelectToEntityAs<NewT>() where NewT : Entity
+        public NewT SelectToEntityAs<NewT>() where NewT : TfEntity
         {
             return this.Select.EntityAs<NewT>();
         }
@@ -136,9 +136,14 @@ namespace Tenderfoot.Database
                 return query.GetScalar();
             }
         }
-
+        
         public virtual bool HasRecords => this.Count > 0;
         public virtual bool HasRecord => this.Count == 1;
+
+        public int GetTotalPageCount(int count)
+        {
+            return (int)Math.Ceiling(((decimal)this.Count / (decimal)count));
+        }
 
         /// <summary>
         /// Inserts the entity's values into the schema.
@@ -270,7 +275,7 @@ namespace Tenderfoot.Database
         }
     }
 
-    public class Select<T> where T : Entity, new()
+    public class Select<T> where T : TfEntity, new()
     {
         internal string TableName { get; set; }
         internal Schema<T> Schema { get; set; }
@@ -352,7 +357,7 @@ namespace Tenderfoot.Database
             }
         }
 
-        public List<NewT> EntitiesAs<NewT>() where NewT : Entity
+        public List<NewT> EntitiesAs<NewT>() where NewT : TfEntity
         {
             return this.Dictionaries.Select(item =>
             {
@@ -365,7 +370,7 @@ namespace Tenderfoot.Database
         /// </summary>
         public T Entity => this.Entities.FirstOrDefault();
 
-        public NewT EntityAs<NewT>() where NewT : Entity
+        public NewT EntityAs<NewT>() where NewT : TfEntity
         {
             return this.EntitiesAs<NewT>().FirstOrDefault();
         }

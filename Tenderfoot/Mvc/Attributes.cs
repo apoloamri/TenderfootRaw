@@ -3,9 +3,6 @@
 namespace Tenderfoot.Mvc
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class InputAttribute : Attribute { }
-
-    [AttributeUsage(AttributeTargets.Property)]
     public class OutputAttribute : Attribute { }
 
     [AttributeUsage(AttributeTargets.Property)]
@@ -20,15 +17,16 @@ namespace Tenderfoot.Mvc
     }
 
     [AttributeUsage(AttributeTargets.Property)]
-    public class ValidateInputAttribute : Attribute
+    public class InputAttribute : Attribute
     {
-        public InputType InputType { get; set; }
+        public InputType? InputType { get; set; }
         public int? Length { get; set; }
-        public ValidateInputAttribute(InputType inputType)
+        public InputAttribute() { }
+        public InputAttribute(InputType inputType)
         {
             this.InputType = inputType;
         }
-        public ValidateInputAttribute(InputType inputType, int length)
+        public InputAttribute(InputType inputType, int length)
         {
             this.InputType = inputType;
             this.Length = length;

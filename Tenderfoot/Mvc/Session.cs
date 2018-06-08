@@ -18,8 +18,8 @@ namespace Tenderfoot.Mvc
             }
 
             var session = Schemas.Sessions;
-            session.Case.Where(session._(x => x.session_id), Is.EqualTo, sessionId);
-            session.Case.Where(session._(x => x.session_time), Is.GreaterThan, DateTime.Now.AddMinutes(-TfSettings.Web.SessionTimeOut));
+            session.Case.Where(session.Column(x => x.session_id), Is.EqualTo, sessionId);
+            session.Case.Where(session.Column(x => x.session_time), Is.GreaterThan, DateTime.Now.AddMinutes(-TfSettings.Web.SessionTimeOut));
 
             var result = session.Select.Entity;
 
@@ -52,9 +52,9 @@ namespace Tenderfoot.Mvc
             }
 
             var session = Schemas.Sessions;
-            session.Case.Where(session._(x => x.session_id), Is.EqualTo, Encryption.Decrypt(sessionId));
-            session.Case.Where(session._(x => x.session_key), Is.EqualTo, sessionKey);
-            session.Case.Where(session._(x => x.session_time), Is.GreaterThan, DateTime.Now.AddMinutes(-TfSettings.Web.SessionTimeOut));
+            session.Case.Where(session.Column(x => x.session_id), Is.EqualTo, Encryption.Decrypt(sessionId));
+            session.Case.Where(session.Column(x => x.session_key), Is.EqualTo, sessionKey);
+            session.Case.Where(session.Column(x => x.session_time), Is.GreaterThan, DateTime.Now.AddMinutes(-TfSettings.Web.SessionTimeOut));
             
             var count = session.Count;
             if (count > 0)

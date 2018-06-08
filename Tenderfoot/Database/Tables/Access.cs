@@ -2,7 +2,7 @@
 
 namespace Tenderfoot.Database.Tables
 {
-    public class Accesses : Entity
+    public class Accesses : TfEntity
     {
         [NotNull]
         public string key { get; set; }

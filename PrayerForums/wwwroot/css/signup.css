@@ -1,5 +1,6 @@
 ﻿body {
     background-image: url('../images/signup.jpg');
+    background-position: center;
     background-size: cover;
 }
 
@@ -38,6 +39,7 @@
 
 #logo {
     background-image: url('../images/logo.png');
+    background-position: center;
     background-size: cover;
     width: 100px;
     height: 100px;

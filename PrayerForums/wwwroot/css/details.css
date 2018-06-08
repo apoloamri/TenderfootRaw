@@ -1,0 +1,33 @@
+﻿#details {
+    padding: 2%;
+    margin: 3%;
+    border: 1px solid #dddddd;
+}
+
+    #details textarea {
+        width: 95%;
+        height: 300px;
+    }
+
+    #details input {
+        width: 30%;
+    }
+
+    #details span {
+        color: #d2691e;
+    }
+
+.replies p {
+    text-align: right;
+}
+
+@media screen and (max-width: 1024px) {
+    #details input {
+        width: 70%;
+    }
+
+    #details textarea {
+        width: 90%;
+        height: 300px;
+    }
+}

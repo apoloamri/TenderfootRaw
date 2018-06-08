@@ -22,7 +22,6 @@ namespace PrayerForums.Models.Prayer
         {
             var requests = _Schemas.Requests;
             requests.Entity.SetValuesFromModel(this.Request);
-            requests.Entity.prayer_type = (int)EnumPrayerType.PrayerRequest;
             requests.Insert();
             TfEmail.Send(
                 "NewPrayerRequest",

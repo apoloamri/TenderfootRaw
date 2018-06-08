@@ -9,14 +9,12 @@ namespace Tenderfoot.Mvc
     {
         public Schema<Accesses> Accesses { get; set; } = Schemas.Accesses;
         
-        [Input]
         [RequireInput(HttpMethod.POST)]
-        [ValidateInput(InputType.String, 50)]
+        [Input(InputType.String, 50)]
         public string Key { get; set; }
         
-        [Input]
         [RequireInput(HttpMethod.POST)]
-        [ValidateInput(InputType.String, 50)]
+        [Input(InputType.String, 50)]
         public string Secret { get; set; }
         
         public override string SessionKey { get; set; }

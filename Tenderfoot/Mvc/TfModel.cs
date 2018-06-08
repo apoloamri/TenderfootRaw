@@ -40,14 +40,12 @@ namespace Tenderfoot.Mvc
         public bool Stop { get; private set; }
         public List<string> InvalidFields { get; set; } = new List<string>();
         
-        [Input]
         [Output]
-        [ValidateInput(InputType.All, 100)]
+        [Input(InputType.All, 100)]
         public virtual string SessionKey { get; set; }
-
-        [Input]
+        
         [Output]
-        [ValidateInput(InputType.All, 100)]
+        [Input(InputType.All, 100)]
         public virtual string SessionId { get; set; }
 
         public string SessionIdValue => Encryption.Decrypt(this.SessionId);
@@ -97,10 +95,7 @@ namespace Tenderfoot.Mvc
             return this.IsValid(stringList.ToArray());
         }
 
-        public bool IsValidSession()
-        {
-            return this.IsValid(nameof(this.SessionId), nameof(this.SessionKey));
-        }
+        public bool IsValidSession => this.IsValid(nameof(this.SessionId), nameof(this.SessionKey));
 
         public ValidationResult FieldRequired(string fieldName)
         {
@@ -129,10 +124,7 @@ namespace Tenderfoot.Mvc
             return validation;
         }
 
-        public bool SessionActive()
-        {
-            return this.ValidateSession() == null;
-        }
+        public bool SessionActive => this.ValidateSession() == null;
 
         public void NewSession(string sessionId)
         {

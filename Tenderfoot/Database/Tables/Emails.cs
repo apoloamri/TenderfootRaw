@@ -1,6 +1,6 @@
 ﻿namespace Tenderfoot.Database.Tables
 {
-    public class Emails : Entity
+    public class Emails : TfEntity
     {
         [NotNull]
         public string mail_from { get; set; }

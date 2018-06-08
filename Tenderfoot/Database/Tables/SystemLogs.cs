@@ -1,6 +1,6 @@
 ﻿namespace Tenderfoot.Database.Tables
 {
-    public class SystemLogs : Entity
+    public class SystemLogs : TfEntity
     {
         [Text]
         [NotNull]

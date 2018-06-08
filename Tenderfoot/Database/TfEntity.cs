@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Tenderfoot.Mvc;
@@ -7,7 +6,7 @@ using Tenderfoot.TfSystem;
 
 namespace Tenderfoot.Database
 {
-    public abstract class Entity : TfBaseModel
+    public abstract class TfEntity : TfBaseModel
     {
         [Serial]
         [PrimaryKey]

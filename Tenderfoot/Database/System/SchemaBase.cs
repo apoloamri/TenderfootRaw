@@ -8,7 +8,7 @@ using Tenderfoot.Tools.Extensions;
 
 namespace Tenderfoot.Database.System
 {
-    public class SchemaBase<T> where T : Entity, new()
+    public class SchemaBase<T> where T : TfEntity, new()
     {
         public string TableName { get; set; }
         
@@ -358,7 +358,7 @@ namespace Tenderfoot.Database.System
         /// <typeparam name="TProp"></typeparam>
         /// <param name="expression"></param>
         /// <returns>The column name.</returns>
-        public TableColumn _<TProp>(Expression<Func<T, TProp>> expression)
+        public TableColumn Column<TProp>(Expression<Func<T, TProp>> expression)
         {
             var body = expression.Body as MemberExpression;
             

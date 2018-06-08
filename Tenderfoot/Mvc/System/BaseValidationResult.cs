@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Linq;
-using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Tenderfoot.Mvc.System
 {
@@ -42,7 +42,24 @@ namespace Tenderfoot.Mvc.System
 
             if (!list.Contains((int)value))
             {
-                TfValidationResult.Compose("InvalidInput", memberNames);
+                return TfValidationResult.Compose("InvalidInput", memberNames, memberNames);
+            }
+            return null;
+        }
+
+        public static ValidationResult ValidateFileName(object value, string[] memberNames)
+        {
+            return Validate(
+                @"^[\w,\s-]+\.[A-Za-z]{3,4}$",
+                value,
+                memberNames);
+        }
+
+        public static ValidationResult ValidateFilePath(object value, string[] memberNames)
+        {
+            if (!Directory.Exists(Path.GetDirectoryName(Convert.ToString(value))))
+            {
+                return TfValidationResult.Compose("InvalidInput", memberNames, memberNames);
             }
             return null;
         }
@@ -51,7 +68,7 @@ namespace Tenderfoot.Mvc.System
         {
             if (!DateTime.TryParse(value?.ToString(), out DateTime dateTime))
             {
-                TfValidationResult.Compose("InvalidInput", memberNames);
+                return TfValidationResult.Compose("InvalidInput", memberNames, memberNames);
             }
             return null;
         }
@@ -74,10 +91,11 @@ namespace Tenderfoot.Mvc.System
 
         public static ValidationResult ValidateURL(object value, string[] memberNames)
         {
-            return Validate(
-                @"(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})",
-                value,
-                memberNames);
+            if (!Uri.IsWellFormedUriString(value.ToString(), UriKind.RelativeOrAbsolute))
+            {
+                return TfValidationResult.Compose("InvalidInput", memberNames, memberNames);
+            }
+            return null;
         }
 
         private static ValidationResult Validate(string pattern, object value, string[] memberNames)

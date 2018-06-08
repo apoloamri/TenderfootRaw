@@ -4,6 +4,62 @@
     border: 1px solid #dddddd;
 }
 
+#praise {
+    height: 400px;
+    background-image: url('../images/praise.jpg');
+    background-position: center;
+    background-size: cover;
+    position: relative;
+    top: -50px;
+}
+
+    #praise div {
+        color: #ffffff;
+        font-size: 28px;
+        text-align: center;
+        margin: 0px 80px;
+        bottom: 0;
+        top: 55%;
+        position: relative;
+    }
+
+#newPraise {
+    background-image: url('../images/new_praise.jpg');
+    background-position: center;
+    background-size: cover;
+}
+
+#report {
+    width: 95%;
+}
+
+.reports {
+    margin: 10px;
+    width: 300px;
+    height: 400px;
+    overflow: hidden;
+    display: inline-block;
+    box-shadow: 0px 0px 25px -8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+    .reports:hover {
+        transform: scale(1.05);
+    }
+
+    .reports div {
+        padding: 0px 20px;
+        margin: 10px;
+        text-align: left;
+    }
+
+    .reports img {
+        object-fit: cover;
+        height: 150px;
+        width: 300px;
+    }
+
 table {
     margin: 20px;
     border-collapse: collapse;

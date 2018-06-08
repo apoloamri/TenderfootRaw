@@ -14,6 +14,12 @@ namespace PrayerForums.Models.Prayer
         [Output]
         public Requests Result { get; set; }
 
+        [Output]
+        public List<dynamic> Replies { get; set; }
+
+        [Output]
+        public int ReplyCount { get; set; } = 0;
+
         public override IEnumerable<ValidationResult> Validate()
         {
             if (this.IsValidRequireInputs())
@@ -25,6 +31,7 @@ namespace PrayerForums.Models.Prayer
         public override void MapModel()
         {
             this.Library.GetRequest();
+            this.Library.GetReplies();
         }
     }
 }

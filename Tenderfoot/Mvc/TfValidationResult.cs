@@ -3,6 +3,7 @@ using Tenderfoot.Tools.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Tenderfoot.Mvc.System;
+using System;
 
 namespace Tenderfoot.Mvc
 {
@@ -57,7 +58,7 @@ namespace Tenderfoot.Mvc
             return null;
         }
 
-        public static ValidationResult ValidateInput(InputType inputType, object value, params string[] memberNames)
+        public static ValidationResult Input(InputType inputType, object value, params string[] memberNames)
         {
             switch (inputType)
             {
@@ -67,6 +68,10 @@ namespace Tenderfoot.Mvc
                     return BaseValidationResult.ValidateAlphaNumeric(value, memberNames);
                 case InputType.Email:
                     return BaseValidationResult.ValidateEmail(value, memberNames);
+                case InputType.FileName:
+                    return BaseValidationResult.ValidateFileName(value, memberNames);
+                case InputType.FilePath:
+                    return BaseValidationResult.ValidateFilePath(value, memberNames);
                 case InputType.DateTime:
                     return BaseValidationResult.ValidateDateTime(value, memberNames);
                 case InputType.Numeric:
@@ -80,6 +85,19 @@ namespace Tenderfoot.Mvc
                 default:
                     return null;
             }
+        }
+
+        public static ValidationResult Length(int length, object value, params string[] memberNames)
+        {
+            var val = Convert.ToString(value);
+            if (val.Length > length)
+            {
+                return Compose(
+                    "InvalidLength", 
+                    new string[] { string.Join(", ", memberNames), Convert.ToString(length) }, 
+                    memberNames);
+            }
+            return null;
         }
     }
 }

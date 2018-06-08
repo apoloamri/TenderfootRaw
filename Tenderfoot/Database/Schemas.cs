@@ -17,7 +17,7 @@ namespace Tenderfoot.Database
         /// <typeparam name="T"></typeparam>
         /// <param name="tableName">Table name for the schema to be created.</param>
         /// <returns></returns>
-        public static Schema<T> CreateTable<T>(string tableName) where T : Entity, new()
+        public static Schema<T> CreateTable<T>(string tableName) where T : TfEntity, new()
         {
             if (TfSettings.Database.Migrate == false)
             {
@@ -27,8 +27,8 @@ namespace Tenderfoot.Database
             CreateDB();
 
             var table = InformationSchemaTables;
-            table.Case.Where(table._(x => x.table_name), Is.EqualTo, tableName);
-            table.Case.AddColumns(table._(x => x.table_name));
+            table.Case.Where(table.Column(x => x.table_name), Is.EqualTo, tableName);
+            table.Case.AddColumns(table.Column(x => x.table_name));
 
             var newSchema = new Schema<T>(tableName);
 
@@ -40,8 +40,8 @@ namespace Tenderfoot.Database
             {
                 var columns = InformationSchemaColumns;
 
-                columns.Case.Where(columns._(x => x.table_name), Is.EqualTo, tableName);
-                columns.Case.AddColumns(columns._(x => x.column_name));
+                columns.Case.Where(columns.Column(x => x.table_name), Is.EqualTo, tableName);
+                columns.Case.AddColumns(columns.Column(x => x.column_name));
 
                 var currentColumns = columns.Select.Entities?.Select(x => x.column_name)?.ToList();
                 var entityColumns = newSchema.Entity.GetColumns()?.ToList();

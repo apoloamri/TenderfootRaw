@@ -1,6 +1,7 @@
 ﻿#preview {
     height: 700px;
     background-image: url('../images/preview.jpg');
+    background-position: center;
     background-size: cover;
     position: relative;
     top: -50px;

@@ -1,6 +1,6 @@
 ﻿namespace Tenderfoot.Database.Tables
 {
-    public class SetupChanges : Entity
+    public class SetupChanges : TfEntity
     {
         [NotNull]
         [Default("0")]

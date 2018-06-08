@@ -1,0 +1,32 @@
+﻿#report img {
+    object-fit: cover;
+    height: 150px;
+    width: 300px;
+}
+
+#praise {
+    height: 500px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    top: -50px;
+    margin: -50px;
+}
+
+    #praise div {
+        color: #ffffff;
+        font-size: 28px;
+        text-align: center;
+        margin: 0px 80px;
+        bottom: 0;
+        top: 55%;
+        position: relative;
+    }
+
+    #praise h1 {
+        text-shadow: 0px 0px 15px #000000;
+    }
+
+#details {
+    margin: 3% 10%;
+}

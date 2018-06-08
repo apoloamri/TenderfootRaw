@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using IO = System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -33,25 +34,28 @@ namespace Tenderfoot.Mvc
         {
             try
             {
-                var obj = Activator.CreateInstance(typeof(Model));
-
                 if (!this.Authorize(authorize))
                 {
                     this.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     return;
                 }
+
+                if (this.ModelObject == null)
+                {
+                    var obj = Activator.CreateInstance(typeof(Model));
+                    this.GetBody(obj);
+                    this.GetQueries(obj);
+                    this.ModelObject = this.ModelDictionary.ToClass<Model>();
+                }
                 
-                this.GetBody(obj);
-                this.GetQueries(obj);
-                this.ModelObject = this.ModelDictionary.ToClass<Model>();
-                
+                this.ModelObject.BeforeStartUp();
+
                 if (this.ModelObject.HasLibrary)
                 {
                     this.ModelObject.SetModelToLibrary();
                 }
 
                 this.GetNecessities();
-                this.ModelObject.BeforeStartUp();
                 this.ValidateModel();
                 this.ModelObject.OnStartUp();
             }
@@ -60,6 +64,12 @@ namespace Tenderfoot.Mvc
                 this.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 TfDebug.WriteLog(ex);
             }
+        }
+
+        public void Upload(TfUploadModel model, bool authorize = true)
+        {
+            this.ModelObject = model;
+            this.Initiate<TfUploadModel>(authorize);
         }
 
         private void ValidateModel()
@@ -151,14 +161,26 @@ namespace Tenderfoot.Mvc
                         }
                     }
 
-                    if (attribute is ValidateInputAttribute && value != null)
+                    if (attribute is InputAttribute && value != null)
                     {
-                        var validateInputAttribute = attribute as ValidateInputAttribute;
-                        var result = TfValidationResult.ValidateInput(validateInputAttribute.InputType, value, property.Name);
-                        if (result != null)
+                        var inputAttribute = attribute as InputAttribute;
+                        if (inputAttribute.InputType.HasValue)
                         {
-                            this.AddModelErrors(property.Name, result, ref validationDictionary);
-                            isValidated = true;
+                            var result = TfValidationResult.Input(inputAttribute.InputType.Value, value, property.Name);
+                            if (result != null)
+                            {
+                                this.AddModelErrors(property.Name, result, ref validationDictionary);
+                                isValidated = true;
+                            }
+                        }
+                        if (inputAttribute.Length.HasValue)
+                        {
+                            var result = TfValidationResult.Length(inputAttribute.Length.Value, value, property.Name);
+                            if (result != null)
+                            {
+                                this.AddModelErrors(property.Name, result, ref validationDictionary);
+                                isValidated = true;
+                            }
                         }
                     }
                 }
@@ -250,15 +272,24 @@ namespace Tenderfoot.Mvc
             if (this.ModelState.IsValid)
             {
                 this.BuildModelDictionary();
+                this.Response.StatusCode = (int)HttpStatusCode.OK;
             }
-            this.Response.StatusCode = (int)HttpStatusCode.OK;
+            else
+            {
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
             return this.JsonResult;
         }
 
         [NonAction]
-        public override ViewResult View()
+        public ActionResult GetFile(string path, string name, string contentType)
         {
-            return this.View(this.Conclude());
+            var fullPath = IO.Path.Combine(path, name);
+            if (IO.File.Exists(fullPath))
+            {
+                return new FileStreamResult(new IO.FileStream(fullPath, IO.FileMode.Open), contentType);
+            }
+            return NotFound();
         }
     }
 }

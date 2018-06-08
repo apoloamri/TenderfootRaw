@@ -22,7 +22,7 @@ var request = new Vue({
                     "firstname": this.firstname,
                     "email": this.email,
                     "request": this.request,
-                    "response": this.response,
+                    "publicity": this.response,
                     "send_email": (this.sendEmail) ? 1 : 0
                 }
             }
@@ -40,7 +40,7 @@ var request = new Vue({
                 },
                 error = function (data) {
                     var response = data.responseJSON;
-                    that.messages = DisplayMessages(response.messages);
+                    that.messages = DisplayMessages(response.messages, true);
                     ShowModal("modalMessage");
                 }
             );

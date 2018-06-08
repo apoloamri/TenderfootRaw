@@ -2,7 +2,7 @@
 
 namespace Tenderfoot.Database.Tables
 {
-    public class Sessions : Entity
+    public class Sessions : TfEntity
     {
         [NotNull]
         [Encrypt]

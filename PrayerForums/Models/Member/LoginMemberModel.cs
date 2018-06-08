@@ -23,7 +23,7 @@ namespace PrayerForums.Models.Member
             if (this.IsGet)
             {
                 yield return this.ValidateSession();
-                if (this.IsValidSession())
+                if (this.IsValidSession)
                 {
                     yield return this.Library.ValidateUsernameSession(this.SessionIdValue);
                 }

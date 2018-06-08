@@ -21,6 +21,9 @@ namespace PrayerForums.Models.Prayer
         [Output]
         public List<Dictionary<string, object>> Result { get; set; } = new List<Dictionary<string, object>>();
 
+        [Output]
+        public int TotalPages { get; set; } = 0;
+
         public override IEnumerable<ValidationResult> Validate()
         {
             return null;
@@ -28,18 +31,38 @@ namespace PrayerForums.Models.Prayer
 
         public override void MapModel()
         {
-            var member = _Schemas.Requests;
-            member.Entity.response = EnumPublic.Public;
-            member.Entity.prayer_type = EnumPrayerType.PrayerRequest;
-            member.Case.Paginate(this.Page, this.Count);
-            member.Case.OrderBy(member._(x => x.insert_time), Order.DESC);
-            foreach (var item in member.Select.Entities)
+            var requests = _Schemas.Requests;
+            if (!this.IsAdmin())
             {
+                requests.Entity.publicity = EnumPublic.Public;
+            }
+            requests.Case.Paginate(this.Page, this.Count);
+            requests.Case.OrderBy(requests.Column(x => x.insert_time), OrderBy.DESC);
+            var result = requests.Select.Entities;
+            foreach (var item in result)
+            {
+                var replies = _Schemas.Replies;
+                replies.Entity.request_id = item.id;
+                var replyCount = replies.Count;
                 var dictionary = item.ToDictionary();
+                dictionary["has_replies"] = replyCount > 0;
                 dictionary["request"] = item.request.Truncate(75);
                 dictionary["insert_time"] = item.insert_time?.ToString("MMMM dd, yyyy");
                 this.Result.Add(dictionary);
             }
+            this.TotalPages = requests.GetTotalPageCount(this.Count);
+        }
+
+        private bool IsAdmin()
+        {
+            if (!this.SessionActive)
+            {
+                return false;
+            }
+            var member = _Schemas.Members;
+            member.Entity.username = this.SessionIdValue;
+            member.Entity.admin = EnumAdmin.Admin;
+            return member.Count == 1;
         }
     }
 }

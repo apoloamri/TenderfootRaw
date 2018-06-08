@@ -1,0 +1,23 @@
+﻿body {
+    background-image: url('../images/praise2.jpg');
+    background-position: center;
+    background-size: cover;
+}
+
+#innerRequest {
+    height: 1175px;
+}
+
+    #innerRequest textarea {
+        height: 450px;
+    }
+
+#title {
+    width: 100% !important;
+}
+
+@media screen and (max-width: 1024px) {
+    #title {
+        width: 80% !important;
+    }
+}

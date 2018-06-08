@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace Tenderfoot.Database.System
 {
-    public class Conditions<TableEntity> where TableEntity : Entity, new()
+    public class Conditions<TableEntity> where TableEntity : TfEntity, new()
     {
         public string[] Columns { get; private set; }
 
@@ -46,7 +46,7 @@ namespace Tenderfoot.Database.System
         /// </summary>
         /// <param name="column">The column where the order will depend.</param>
         /// <param name="order">The given order. May it be ascending or descending.</param>
-        public void OrderBy(TableColumn column, Order order)
+        public void OrderBy(TableColumn column, OrderBy order)
         {
             if (column == null)
             {
@@ -149,17 +149,17 @@ namespace Tenderfoot.Database.System
             this.ColumnCount++;
         }
 
-        public void Exists<T>(Operator? oper, Schema<T> schema, params Relation[] columnOn) where T : Entity, new()
+        public void Exists<T>(Operator? oper, Schema<T> schema, params Relation[] columnOn) where T : TfEntity, new()
         {
             this.ExistsBase(oper, schema, false, columnOn);
         }
 
-        public void NotExists<T>(Operator? oper, Schema<T> schema, params Relation[] columnOn) where T : Entity, new()
+        public void NotExists<T>(Operator? oper, Schema<T> schema, params Relation[] columnOn) where T : TfEntity, new()
         {
             this.ExistsBase(oper, schema, true, columnOn);
         }
 
-        private void ExistsBase<T>(Operator? oper, Schema<T> schema, bool notExists, params Relation[] columnOn) where T : Entity, new()
+        private void ExistsBase<T>(Operator? oper, Schema<T> schema, bool notExists, params Relation[] columnOn) where T : TfEntity, new()
         {
             string existence = notExists ?
                 "NOT" :

@@ -1,6 +1,6 @@
 ﻿namespace Tenderfoot.Database.Tables
 {
-    public class InformationSchema : Entity
+    public class InformationSchema : TfEntity
     {
         public string table_catalog { get; set; }
         public string table_schema { get; set; }

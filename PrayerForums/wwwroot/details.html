@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Send your prayer requests, share your testimonies, spread the word of God." />
+    <title>Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/common/site.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="css/common/modal.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="css/details.css" />
+    <script src="js/lib/jquery-3.3.1.js"></script>
+    <script src="js/lib/vue.js"></script>
+    <script src="js/common/site.js"></script>
+    <script src="js/common/modal.js"></script>
+</head>
+<body>
+    <header>
+        <div></div>
+        <nav id="navigation">
+            <a href="index.html">HOME</a>
+            <a href="community.html">COMMUNITY</a>
+            <a href="contact.html">CONTACT</a>
+            <span v-if="isLoggedIn == true"><a href="#" onclick="Logout()">LOG OUT</a></span>
+            <span v-else><a href="signup.html">SIGN UP</a></span>
+        </nav>
+    </header>
+    <div id="header"></div>
+    <div id="details">
+        <h1 style="white-space:pre-line;">{{result.request}}</h1>
+        <p>A request by: <span>{{result.firstname}} {{result.lastname}}</span></p>
+        <h3>{{replyCount}} responses</h3><hr />
+        <div class="replies" v-for="reply in replies">
+            <div style="overflow:hidden;">
+                <div style="float:right;width:70%">
+                    <p>
+                        {{reply.response}}<br /><br />
+                        <span>{{reply.firstname}}</span>
+                    </p>
+                </div>
+            </div><hr />
+        </div>
+        <input v-model="lastname" type="text" placeholder="Last name" /><br />
+        <input v-model="firstname" type="text" placeholder="First name" /><br />
+        <input v-model="email" type="text" placeholder="Email address" /><br />
+        <textarea v-model="response" placeholder="Your response here..."></textarea>
+        <button v-on:click="SendResponse()">Submit Response</button>
+        <div id="modalMessage" class="modal unshow" style="width:300px;bottom:inherit;padding:5%">
+            <center>
+                <div v-if="valid == true">
+                    <p>Your reply has been sent, {{firstname}}.</p>
+                    <button v-on:click="GetDetails()">Close</button>
+                </div>
+                <div v-else>
+                    <p v-html="messages"></p>
+                    <button onclick="HideModal()">Close</button>
+                </div>
+            </center>
+        </div>
+    </div>
+    <footer>
+        <div id="footerContent">
+            <div class="row">
+                <div class="column">
+                    <h2>INFORMATION</h2>
+                    <p>Lorem ipsum dolor sit amet, consecttur adipiscing egestas rhoncus Praesent Nunc pretium est...</p>
+                    <p>Email:<br />paolomari.macaraig@yahoo.com.ph</p>
+                    <p>Contact:<br />+63 (997) 914-3100</p>
+                    <p>Address:<br />#26 Michael Street, Kingsville Subdivision, Antipolo City</p>
+                </div>
+                <div class="column">
+                    <h2>EVENTS</h2>
+                    <center>
+                        <div class="event">Super Summer Baptism<br /><span>January 29, 2018</span></div>
+                        <div class="event">200 Member Milestone<br /><span>January 14, 2018</span></div>
+                        <div class="event">Construction Of Our New Church<br /><span>January 7, 2018</span></div>
+                        <div class="event">Financial Faith Literacy<br /><span>January 1, 2018</span></div>
+                    </center>
+                </div>
+                <div class="column">
+                    <h2>NEWS LETTER</h2>
+                    Sign up for our mailing list to get latest updates and offers.<br />
+                    <input type="text" placeholder="Email Address" /><br />
+                    <button>SUBMIT</button>
+                </div>
+            </div>
+        </div>
+        <div id="credits">- Tenderfoot 2018 -</div>
+    </footer>
+    <div id="modalShadow" class="unshow"></div>
+    <div id="modalLoading" class="modal unshow"></div>
+    <script src="js/main.js"></script>
+    <script src="js/details.js"></script>
+</body>
+</html>

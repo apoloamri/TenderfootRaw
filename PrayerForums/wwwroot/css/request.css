@@ -1,5 +1,6 @@
 ﻿body {
     background-image: url('../images/request.jpg');
+    background-position: center;
     background-size: cover;
 }
 
@@ -26,7 +27,6 @@
     }
 
     #innerRequest textarea {
-        width: 90%;
         height: 300px;
     }
 
@@ -55,6 +55,10 @@
     #innerRequest {
         overflow: scroll;
     }
+
+        #innerRequest textarea {
+            width: 80%;
+        }
     
     #left {
         width: 90%;

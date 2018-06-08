@@ -32,7 +32,7 @@ namespace PrayerForums.Models.Member
         {
             var members = _Schemas.Members;
             members.Entity.active = EnumActive.Active;
-            members.Case.Where(members._(x => x.activation_key), Is.EqualTo, this.Key);
+            members.Case.Where(members.Column(x => x.activation_key), Is.EqualTo, this.Key);
             members.Update();
             TfEmail.Send(
                 "MemberActivated",

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using Tenderfoot.Mvc;
 using Tenderfoot.TfSystem;
 
@@ -12,7 +11,7 @@ namespace PrayerForums.Controllers
         public ActionResult ImagesPraise(string name)
         {
             return this.GetFile(
-                Convert.ToString(TfSettings.GetSettings("PrayerForums", "ImageUploadPraise")),
+                TfSettings.GetSettings("PrayerForums", "ImageUploadPraise"),
                 name,
                 "image/jpeg");
         }

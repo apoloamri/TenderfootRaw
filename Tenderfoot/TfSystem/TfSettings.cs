@@ -1,20 +1,19 @@
-﻿using Tenderfoot.Database;
-using Tenderfoot.Tools.Extensions;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Linq;
+using Tenderfoot.Tools.Extensions;
 
 namespace Tenderfoot.TfSystem
 {
     public static class TfSettings
     {
-        public static IConfigurationRoot Configuration(string fileName = null)
+        private static IConfigurationRoot Configuration(string fileName = null, bool getDefault = false)
         {
             if (fileName.IsEmpty())
             {
                 string deployment = Deploy.Deployment;
-                string deploymentString = deployment.IsEmpty() ? "" : $".{deployment}";
+                string deploymentString = deployment.IsEmpty() || getDefault ? "" : $".{deployment}";
                 fileName = $"appsettings{deploymentString}.json";
             }
 
@@ -25,9 +24,9 @@ namespace Tenderfoot.TfSystem
             return configurationBuilder.Build();
         }
 
-        public static object GetSettings(params string[] settings)
+        private static string GetSettingsBase(string fileName, string[] settings, bool getDefault = false)
         {
-            var config = Configuration();
+            var config = Configuration(fileName, getDefault);
             var section = config.GetSection(settings.FirstOrDefault());
 
             var skipFirst = true;
@@ -44,45 +43,53 @@ namespace Tenderfoot.TfSystem
             return section.Value;
         }
 
+        public static string GetSettings(params string[] settings)
+        {
+            var value = GetSettingsBase(null, settings, false);
+            return value.IsEmpty() ? GetSettingsBase(null, settings, true) : value;
+        }
+
+        public static string GetSettingsWithFile(string fileName, params string[] settings)
+        {
+            var value = GetSettingsBase(fileName, settings, false);
+            return value.IsEmpty() ? GetSettingsBase(fileName, settings, true) : value;
+        }
+        
         public static class Web
         {
-            private static IConfigurationSection ConfigurationSection = Configuration().GetSection("Web");
-
-            public static string[] AllowOrigins => ConfigurationSection.GetSection("AllowOrigins").Value.Split(',');
-            public static string ApiUrl => ConfigurationSection.GetSection("ApiUrl").Value;
-            public static int SessionTimeOut => Convert.ToInt32(ConfigurationSection.GetSection("SessionTimeOut").Value);
-            public static bool RequireHttps => Convert.ToBoolean(ConfigurationSection.GetSection("RequireHttps").Value);
-            public static string SiteUrl => ConfigurationSection.GetSection("SiteUrl").Value;
-            public static string SmtpEmail => ConfigurationSection.GetSection("SmtpEmail").Value;
-            public static string SmtpHost => ConfigurationSection.GetSection("SmtpHost").Value;
-            public static string SmtpPassword => ConfigurationSection.GetSection("SmtpPassword").Value;
-            public static int SmtpPort => Convert.ToInt32(ConfigurationSection.GetSection("SmtpPort").Value);
+            public static string[] AllowOrigins => GetSettings("Web", "AllowOrigins").Split(',');
+            public static string ApiUrl => GetSettings("Web", "ApiUrl");
+            public static int SessionTimeOut => Convert.ToInt32(GetSettings("Web", "SessionTimeOut"));
+            public static bool RequireHttps => Convert.ToBoolean(GetSettings("Web", "RequireHttps"));
+            public static string SiteUrl => GetSettings("Web", "SiteUrl");
+            public static string SmtpEmail => GetSettings("Web", "SmtpEmail");
+            public static string SmtpHost => GetSettings("Web", "SmtpHost");
+            public static string SmtpPassword => GetSettings("Web", "SmtpPassword");
+            public static int SmtpPort => Convert.ToInt32(GetSettings("Web", "SmtpPort"));
         }
 
         public static class Database
         {
-            private static IConfigurationSection ConfigurationSection = Configuration().GetSection("Database");
-
-            public static string Encoding => ConfigurationSection.GetSection("Encoding").Value;
-            public static string Server => ConfigurationSection.GetSection("Server").Value;
-            public static string Port => ConfigurationSection.GetSection("Port").Value;
-            public static string DatabaseName => ConfigurationSection.GetSection("Database").Value;
-            public static string UserId => ConfigurationSection.GetSection("UserId").Value;
-            public static string Password => ConfigurationSection.GetSection("Password").Value;
+            public static string Encoding => GetSettings("Database", "Encoding");
+            public static string Server => GetSettings("Database", "Server");
+            public static string Port => GetSettings("Database", "Port");
+            public static string DatabaseName => GetSettings("Database", "Database");
+            public static string UserId => GetSettings("Database", "UserId");
+            public static string Password => GetSettings("Database", "Password");
 
             public static string ConnectionString
             {
                 get
                 {
-                    string commandTimeout = ConfigurationSection.GetSection("CommandTimeout").Value;
-                    string timeout = ConfigurationSection.GetSection("Timeout").Value;
-                    string protocol = ConfigurationSection.GetSection("Protocol").Value;
-                    string ssl = ConfigurationSection.GetSection("SSL").Value;
-                    string sslMode = ConfigurationSection.GetSection("SslMode").Value;
-                    string pooling = ConfigurationSection.GetSection("Pooling").Value;
-                    string minPoolSize = ConfigurationSection.GetSection("MinPoolSize").Value;
-                    string maxPoolSize = ConfigurationSection.GetSection("MaxPoolSize").Value;
-                    string connectionLifeTime = ConfigurationSection.GetSection("ConnectionLifeTime").Value;
+                    string commandTimeout = GetSettings("Database", "CommandTimeout");
+                    string timeout = GetSettings("Database", "Timeout");
+                    string protocol = GetSettings("Database", "Protocol");
+                    string ssl = GetSettings("Database", "SSL");
+                    string sslMode = GetSettings("Database", "SslMode");
+                    string pooling = GetSettings("Database", "Pooling");
+                    string minPoolSize = GetSettings("Database", "MinPoolSize");
+                    string maxPoolSize = GetSettings("Database", "MaxPoolSize");
+                    string connectionLifeTime = GetSettings("Database", "ConnectionLifeTime");
 
                     return
                         (!Server.IsEmpty() ? $"Server={Server};" : string.Empty) +
@@ -115,44 +122,41 @@ namespace Tenderfoot.TfSystem
                 }
             }
 
-            public static bool Migrate => Convert.ToBoolean(ConfigurationSection.GetSection("Migrate").Value);
+            public static bool Migrate => Convert.ToBoolean(GetSettings("Database", "Migrate"));
+            public static bool CreateDB => Convert.ToBoolean(GetSettings("Database", "CreateDB"));
         }
 
         public static class Encryption
         {
-            private static IConfigurationSection ConfigurationSection = Configuration().GetSection("Encryption");
-
-            public static bool Active => Convert.ToBoolean(ConfigurationSection.GetSection("Active").Value);
-            public static string PasswordHash => ConfigurationSection.GetSection("PasswordHash").Value;
-            public static string SaltKey => ConfigurationSection.GetSection("SaltKey").Value;
-            public static string VIKey => ConfigurationSection.GetSection("VIKey").Value;
+            public static bool Active => Convert.ToBoolean(GetSettings("Encryption", "Active"));
+            public static string PasswordHash => GetSettings("Encryption", "PasswordHash");
+            public static string SaltKey => GetSettings("Encryption", "SaltKey");
+            public static string VIKey => GetSettings("Encryption", "VIKey");
         }
 
         public static class Logs
         {
-            private static IConfigurationSection ConfigurationSection = Configuration().GetSection("Logs");
-
-            public static bool DBLogging => Convert.ToBoolean(ConfigurationSection.GetSection("DBLogging").Value);
-            public static string Migration => ConfigurationSection.GetSection("Migration").Value;
-            public static string System => ConfigurationSection.GetSection("System").Value;
+            public static bool DBLogging => Convert.ToBoolean(GetSettings("Logs", "DBLogging"));
+            public static string Migration => GetSettings("Logs", "Migration");
+            public static string System => GetSettings("Logs", "System");
         }
 
         public static class System
         {
             private static IConfigurationSection ConfigurationSection = Configuration().GetSection("System");
 
-            public static bool Debug => Convert.ToBoolean(ConfigurationSection.GetSection("Debug").Value);
-            public static string DefaultKey => ConfigurationSection.GetSection("DefaultKey").Value;
-            public static string DefaultSecret => ConfigurationSection.GetSection("DefaultSecret").Value;
+            public static bool Debug => Convert.ToBoolean(GetSettings("System", "Debug"));
+            public static string DefaultKey => GetSettings("System", "DefaultKey");
+            public static string DefaultSecret => GetSettings("System", "DefaultSecret");
         }
 
         public static class SystemResources
         {
             private static IConfigurationSection ConfigurationSection = Configuration().GetSection("SystemResources");
 
-            public static string EmailFiles => ConfigurationSection.GetSection("EmailFiles").Value;
-            public static string FieldMessages => ConfigurationSection.GetSection("FieldMessages").Value;
-            public static string SystemMessages => ConfigurationSection.GetSection("SystemMessages").Value;
+            public static string EmailFiles => GetSettings("SystemResources", "EmailFiles");
+            public static string FieldMessages => GetSettings("SystemResources", "FieldMessages");
+            public static string SystemMessages => GetSettings("SystemResources", "SystemMessages");
         }
     }
 }

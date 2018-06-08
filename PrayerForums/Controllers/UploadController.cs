@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using Tenderfoot.Mvc;
 using Tenderfoot.TfSystem;
 
@@ -14,7 +13,7 @@ namespace PrayerForums.Controllers
         {
             this.Upload(new TfUploadModel()
             {
-                FilePath = Convert.ToString(TfSettings.GetSettings("PrayerForums", "ImageUploadTemp")),
+                FilePath = TfSettings.GetSettings("PrayerForums", "ImageUploadTemp"),
                 File = file
             }, false);
             return this.Conclude();

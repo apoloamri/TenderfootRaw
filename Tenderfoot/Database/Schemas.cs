@@ -65,26 +65,29 @@ namespace Tenderfoot.Database
 
         private static void CreateDB()
         {
-            var connectionString = TfSettings.Database.DefaultConnectionString;
-            var dbName = TfSettings.Database.DatabaseName;
-            var param = ConnectProvider.Param();
-            var query = new Query(
-                connectionString,
-                $"{Operations.SELECT} COUNT('datname') FROM pg_catalog.pg_database where datname = {param}dbName;",
-                new Dictionary<string, object>() { { "dbName", dbName } });
-
-            if (query.GetScalar() > 0)
+            if (TfSettings.Database.CreateDB)
             {
-                return;
-            }
+                var connectionString = TfSettings.Database.DefaultConnectionString;
+                var dbName = TfSettings.Database.DatabaseName;
+                var param = ConnectProvider.Param();
+                var query = new Query(
+                    connectionString,
+                    $"{Operations.SELECT} COUNT('datname') FROM pg_catalog.pg_database where datname = {param}dbName;",
+                    new Dictionary<string, object>() { { "dbName", dbName } });
 
-            var userId = TfSettings.Database.UserId;
-            var encoding = TfSettings.Database.Encoding;
-            var nonQuery = new NonQuery(
-                connectionString,
-                $"{Operations.CREATE_DATABASE.GetString()} {dbName} WITH OWNER = {userId} ENCODING = '{encoding}';",
-                null);
-            nonQuery.ExecuteNonQuery(Operations.CREATE_DATABASE);
+                if (query.GetScalar() > 0)
+                {
+                    return;
+                }
+
+                var userId = TfSettings.Database.UserId;
+                var encoding = TfSettings.Database.Encoding;
+                var nonQuery = new NonQuery(
+                    connectionString,
+                    $"{Operations.CREATE_DATABASE.GetString()} {dbName} WITH OWNER = {userId} ENCODING = '{encoding}';",
+                    null);
+                nonQuery.ExecuteNonQuery(Operations.CREATE_DATABASE);
+            }
         }
         
         private static Schema<InformationSchema> InformationSchemaTables => new Schema<InformationSchema>("information_schema.tables");

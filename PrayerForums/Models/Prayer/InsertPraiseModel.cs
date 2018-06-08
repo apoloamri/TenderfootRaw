@@ -1,5 +1,4 @@
 ﻿using PrayerForums.Library.Database;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
@@ -41,8 +40,8 @@ namespace PrayerForums.Models.Prayer
                 return string.Empty;
             }
 
-            var tempPath = Convert.ToString(TfSettings.GetSettings("PrayerForums", "ImageUploadTemp"));
-            var imagePath = Convert.ToString(TfSettings.GetSettings("PrayerForums", "ImageUploadPraise"));
+            var tempPath = TfSettings.GetSettings("PrayerForums", "ImageUploadTemp");
+            var imagePath = TfSettings.GetSettings("PrayerForums", "ImageUploadPraise");
             var fileName = Path.GetFileName(imageUrl);
 
             Directory.CreateDirectory(imagePath);

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace Tenderfoot.Mvc
 {
@@ -11,6 +12,14 @@ namespace Tenderfoot.Mvc
         {
             services.AddCors();
             services.AddMvc();
+            services.Configure<RazorViewEngineOptions>(razor =>
+            {
+                // {2} is area, {1} is controller,{0} is the action    
+                razor.ViewLocationFormats.Clear();
+                razor.ViewLocationFormats.Add("/wwwroot/{0}" + RazorViewEngine.ViewExtension);
+                razor.ViewLocationFormats.Add("/wwwroot/{1}/{0}" + RazorViewEngine.ViewExtension);
+                razor.ViewLocationFormats.Add("/wwwroot/Shared/{0}" + RazorViewEngine.ViewExtension);
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -31,6 +40,7 @@ namespace Tenderfoot.Mvc
             }
             
             app.UseMvc();
+            app.UseStaticFiles();
         }
     }
 }

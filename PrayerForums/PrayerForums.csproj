@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,6 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Library\API\Models\" />
+    <Folder Include="Library\API\Controllers\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 

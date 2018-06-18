@@ -1,0 +1,63 @@
+﻿<link rel="stylesheet" type="text/css" media="screen" href="css/community.css" />
+<div id="praise">
+    <div>
+        <h2>PRAISE REPORT</h2>
+    </div>
+</div>
+<center>
+    <div id="praiseReport">
+        <div v-for="item in result" v-on:click="GoToDetails(item.id)" class="reports">
+            <img v-if="item.image_url != '' && item.image_url != null" v-bind:src="item.image_url" />
+            <img v-else src="images/request.jpg" />
+            <div>
+                <h3>{{item.title}}</h3>
+                <p>{{item.message}}</p>
+            </div>
+        </div>
+        <div onclick="VisitPage('praise.html')" id="newPraise" class="reports">
+            <div>
+                <center>
+                    <h3 style="color:#ffffff;">Share your experiences!</h3>
+                </center>
+            </div>
+        </div>
+    </div>
+</center>
+<div id="community">
+    <h1>Prayer Wall</h1>
+    <p>We believe that God wants healing in our lives and works in a variety of ways to provide for our well-being. The Heartwise Prayer Forum has been developed to facilitate sharing one’s prayer requests, lifting up others in prayer, and sharing praises of how God has worked in your life. We hope that this is a place that you will visit often and that you will be blessed as God leads us to experience healing. If you would like someone to call to pray with you, please contact us.</p>
+    <div id="prayerWall">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 70%;">Prayer Request</th>
+                    <th>Request From</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in result">
+                    <td v-on:click="GoToDetails(item.id)">
+                        {{item.request}}
+                        <span>
+                            {{item.insert_time}}
+                            <span style="display:inline;" v-if="item.publicity == 0">(Private)</span>
+                            <span style="display:inline;" v-if="item.has_replies == false">(Unanswered)</span>
+                        </span>
+                    </td>
+                    <td>{{item.firstname}} {{item.lastname}}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="button">
+                        <center onclick="VisitPage('request.html')">REQUEST A PRAYER</center>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="pager">
+            <center><h3>{{page}} / {{totalPages}}</h3></center>
+            <button v-on:click="PreviousPage()"><<</button>
+            <button v-on:click="NextPage()" style="float:right;">>></button>
+        </div>
+    </div>
+</div>
+<script src="js/community.js"></script>

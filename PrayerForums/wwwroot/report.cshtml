@@ -1,0 +1,30 @@
+﻿<link rel='stylesheet' type='text/css' media='screen' href='css/details.css' />
+<link rel='stylesheet' type='text/css' media='screen' href='css/report.css' />
+<script src='js/common/facebook.js'></script>
+<div id="report">
+    @if (!string.IsNullOrEmpty(Model["result"].image_url))
+    {
+        <div style="background-image:url('@Model["result"].image_url')" id="praise">
+            <div>
+                <h1>@Model["result"].title</h1>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div>
+            <div id="header"></div>
+            <center>
+                <h1 style="width:70%">@Model["result"].title</h1>
+            </center>
+        </div>
+    }
+    <div id="details">
+        <p>@Model["result"].message</p>
+        <p style="text-align:right;">A praise by: <span>@Model["result"].firstname @Model["result"].lastname</span></p>
+        <div class="fb-share-button"
+             data-href='https://www.prayerforum.com/report.html?id=@Model["result"].id'
+             data-layout="button_count">
+        </div>
+    </div>
+</div>

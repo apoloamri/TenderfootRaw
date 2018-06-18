@@ -22,6 +22,7 @@ namespace Tenderfoot.Mvc.System
         protected JsonSerializerSettings JsonSettings = new JsonSerializerSettings { Formatting = Formatting.Indented };
         protected JsonResult JsonResult { get; set; }
         protected Dictionary<string, object> ModelDictionary { get; set; } = new Dictionary<string, object>();
+        protected Dictionary<string, object> DictionaryResult { get; set; }
         protected Dictionary<string, object> Messages
         {
             get

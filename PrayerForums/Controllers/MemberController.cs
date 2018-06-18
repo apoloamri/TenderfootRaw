@@ -14,6 +14,13 @@ namespace PrayerForums.Controllers
             return this.Conclude();
         }
 
+        [HttpPost("facebook")]
+        public JsonResult InsertFacebookMember()
+        {
+            this.Initiate<InsertFacebookMemberModel>(false);
+            return this.Conclude();
+        }
+
         [HttpPost("activate")]
         public JsonResult ActivateMember()
         {

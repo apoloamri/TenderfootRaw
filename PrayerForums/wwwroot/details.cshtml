@@ -1,0 +1,35 @@
+﻿<link rel="stylesheet" type="text/css" media="screen" href="css/details.css" />
+<div id="header"></div>
+<div id="details">
+    <h1 style="white-space:pre-line;">{{result.request}}</h1>
+    <p>A request by: <span>{{result.firstname}} {{result.lastname}}</span></p>
+    <h3>{{replyCount}} responses</h3><hr />
+    <div class="replies" v-for="reply in replies">
+        <div style="overflow:hidden;">
+            <div style="float:right;width:70%">
+                <p>
+                    {{reply.response}}<br /><br />
+                    <span>{{reply.firstname}}</span>
+                </p>
+            </div>
+        </div><hr />
+    </div>
+    <input v-model="lastname" type="text" placeholder="Last name" /><br />
+    <input v-model="firstname" type="text" placeholder="First name" /><br />
+    <input v-model="email" type="text" placeholder="Email address" /><br />
+    <textarea v-model="response" placeholder="Your response here..."></textarea>
+    <button v-on:click="SendResponse()">Submit Response</button>
+    <div id="modalMessage" class="modal unshow" style="width:300px;bottom:inherit;padding:5%">
+        <center>
+            <div v-if="valid == true">
+                <p>Your reply has been sent, {{firstname}}.</p>
+                <button v-on:click="GetDetails()">Close</button>
+            </div>
+            <div v-else>
+                <p v-html="messages"></p>
+                <button onclick="HideModal()">Close</button>
+            </div>
+        </center>
+    </div>
+</div>
+<script src="js/details.js"></script>

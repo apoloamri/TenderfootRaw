@@ -27,7 +27,7 @@ namespace Tenderfoot.Mvc
     public abstract class TfModel : TfBaseModel
     {
         public abstract IEnumerable<ValidationResult> Validate();
-
+        
         public string Host { get; set; }
         public Controller Controller { get; set; }
         public HttpMethod Method { get; set; }

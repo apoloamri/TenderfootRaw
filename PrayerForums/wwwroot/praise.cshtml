@@ -1,0 +1,35 @@
+﻿<link rel="stylesheet" type="text/css" media="screen" href="css/request.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="css/praise.css" />
+<div id="header"></div>
+<center>
+    <div id="praise">
+        <div id="innerRequest" class="row">
+            <div id="left">
+                <h1>Give Praise Report</h1>
+                <p>Thank you for your engagement with our online community. The purpose of the prayer wall is to allow users to pray as a community and connect around their prayer needs. Though we know that prayer and conversations sometimes travel away from the immediate topic, we are committed to maintaining an open, welcoming, and fruitful space for prayer for anyone who wishes to participate.</p>
+                <input v-model="lastname" type="text" placeholder="Last name" />
+                <input v-model="firstname" type="text" placeholder="First name" />
+                <input v-model="email" type="text" placeholder="Email address" />
+                <input v-model="title" type="text" placeholder="Title" id="title" />
+                <center><textarea v-model="message" placeholder="Your praise report here..."></textarea></center>
+                <input v-on:change="ImageUpload" type="file" placeholder="Header Image" id="headerImage" /><span style="margin-left:10px;color:#808080">(Optional)</span>
+                <center><button v-on:click="SendRequest()">Submit Praise Report</button></center>
+            </div>
+            <div id="right">
+                <h3>Today's prayer</h3>
+                <p>Dear Father, thank you for always being with us, for giving us a faith stronger than any fears. Amen.</p>
+            </div>
+        </div>
+        <div id="modalMessage" class="modal unshow" style="width:300px;bottom:inherit;padding:5%">
+            <div v-if="valid == true">
+                <p>Your praise has been sent, {{firstname}}.</p>
+                <button onclick="window.location='community.html'">Go to the Community page</button>
+            </div>
+            <div v-else>
+                <p v-html="messages"></p>
+                <button onclick="HideModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</center>
+<script src="js/praise.js"></script>

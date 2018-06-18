@@ -96,19 +96,19 @@ namespace Tenderfoot.Tools.Extensions
             return ReturnVal;
         }
 
-        public static string FormatFromDictionary(this string formatString, Dictionary<string, object> ValueDict)
+        public static string FormatFromDictionary(this string formatString, Dictionary<string, object> valueDict)
         {
             int i = 0;
             StringBuilder newFormatString = new StringBuilder(formatString);
             Dictionary<string, int> keyToInt = new Dictionary<string, int>();
-            foreach (var tuple in ValueDict)
+            foreach (var tuple in valueDict)
             {
                 var key = tuple.Key.ToUnderscore();
                 newFormatString = newFormatString.Replace("{" + key + "}", "{" + i.ToString() + "}");
                 keyToInt.Add(key, i);
                 i++;
             }
-            return String.Format(newFormatString.ToString(), ValueDict.OrderBy(x => keyToInt[x.Key]).Select(x => x.Value).ToArray());
+            return String.Format(newFormatString.ToString(), valueDict.OrderBy(x => keyToInt[x.Key]).Select(x => x.Value).ToArray());
         }
 
         public static string Truncate(this string value, int maxChars)

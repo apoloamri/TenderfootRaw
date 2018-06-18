@@ -59,8 +59,9 @@ namespace Tenderfoot.TfSystem
         {
             public static string[] AllowOrigins => GetSettings("Web", "AllowOrigins").Split(',');
             public static string ApiUrl => GetSettings("Web", "ApiUrl");
-            public static int SessionTimeOut => Convert.ToInt32(GetSettings("Web", "SessionTimeOut"));
+            public static int PaginateCount => Convert.ToInt32(GetSettings("Web", "PaginateCount"));
             public static bool RequireHttps => Convert.ToBoolean(GetSettings("Web", "RequireHttps"));
+            public static int SessionTimeOut => Convert.ToInt32(GetSettings("Web", "SessionTimeOut"));
             public static string SiteUrl => GetSettings("Web", "SiteUrl");
             public static string SmtpEmail => GetSettings("Web", "SmtpEmail");
             public static string SmtpHost => GetSettings("Web", "SmtpHost");

@@ -34,6 +34,8 @@ namespace Tenderfoot.Mvc
         {
             try
             {
+                this.Initiated = true;
+
                 if (!this.Authorize(authorize))
                 {
                     this.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
@@ -230,11 +232,17 @@ namespace Tenderfoot.Mvc
             jsonDictionary.Add("messages", string.Empty);
 
             this.JsonResult = base.Json(jsonDictionary, this.JsonSettings);
+            this.DictionaryResult = jsonDictionary;
         }
 
         [NonAction]
         public JsonResult Conclude()
         {
+            if (!this.Initiated)
+            {
+                return this.JsonResult;
+            }
+
             try
             {
                 if (this.ModelObject != null &&
@@ -290,6 +298,46 @@ namespace Tenderfoot.Mvc
                 return new FileStreamResult(new IO.FileStream(fullPath, IO.FileMode.Open), contentType);
             }
             return NotFound();
+        }
+        
+        [NonAction]
+        public new ActionResult View(string viewName)
+        {
+            this.Conclude();
+            if (this.ModelState.IsValid)
+            {
+                var actionName = Convert.ToString(this.ControllerContext.RouteData.Values["action"]);
+                if (!actionName.IsEmpty())
+                {
+                    var property = this.GetType().GetMethod(actionName);
+                    if (property != null)
+                    {
+                        var attribute = property.GetCustomAttribute<ViewAttribute>();
+                        if (attribute != null)
+                        {
+                            this.ViewBag.PartialView = viewName;
+                            viewName = (attribute as ViewAttribute).ViewName;
+                        }
+                    }
+                }
+                if (this.DictionaryResult == null)
+                {
+                    this.DictionaryResult = (new DefaultModel()).ToDictionary();
+                }
+                this.DictionaryResult.Add("site_url", TfSettings.Web.SiteUrl);
+                this.DictionaryResult.Add("api_url", TfSettings.Web.ApiUrl);
+                return base.View(viewName, this.DictionaryResult);
+            }
+            return NotFound();
+        }
+        
+        private bool Initiated { get; set; } = false;
+        private class DefaultModel : TfModel
+        {
+            public override IEnumerable<ValidationResult> Validate()
+            {
+                return null;
+            }
         }
     }
 }

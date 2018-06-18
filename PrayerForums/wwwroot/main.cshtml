@@ -5,31 +5,34 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Send your prayer requests, share your testimonies, spread the word of God." />
     <title>Prayer Forums</title>
+    @if (Model.ContainsKey("result"))
+    {
+        <!--Facebook Open Graph-->
+        <meta property="og:title" content='@Model["result"].title' />
+        <meta property="og:description" content='@Model["result"].message' />
+        <meta property="og:image" content='@Model["result"].image_url' />
+        <!--Facebook Open Graph-->
+    }
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="css/common/site.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="css/common/modal.css" />
-    <script src="js/lib/jquery-3.3.1.js"></script>
-    <script src="js/lib/vue.js"></script>
-    <script src="js/common/site.js"></script>
-    <script src="js/common/uploader.js"></script>
-    <script src="js/common/modal.js"></script>
+    <link rel='stylesheet' type='text/css' media='screen' href='css/common/site.css' />
+    <link rel='stylesheet' type='text/css' media='screen' href='css/common/modal.css' />
+    <script src='js/lib/jquery-3.3.1.js'></script>
+    <script src='js/lib/vue.js'></script>
+    <script src='js/common/site.js'></script>
+    <script src='js/common/modal.js'></script>
 </head>
 <body>
     <header>
         <div></div>
         <nav id="navigation">
-            <a href="index.html">HOME</a>
-            <a href="community.html">COMMUNITY</a>
-            <a href="contact.html">CONTACT</a>
+            <a href='index.html'>HOME</a>
+            <a href='community.html'>COMMUNITY</a>
+            <a href='contact.html'>CONTACT</a>
             <span v-if="isLoggedIn == true"><a href="#" onclick="Logout()">LOG OUT</a></span>
             <span v-else><a href="signup.html">SIGN UP</a></span>
         </nav>
     </header>
-    <div id="header"></div>
-    <div>
-        <input type="file" class="upload" id="imageUploader"><br />
-        <img id="imagePreview" alt="Photo" style="width:180px;" />
-    </div>
+    @Html.Partial((string)ViewBag.PartialView)
     <footer>
         <div id="footerContent">
             <div class="row">
@@ -59,7 +62,8 @@
         </div>
         <div id="credits">- Tenderfoot 2018 -</div>
     </footer>
-    <script src="js/main.js"></script>
-    <script src="js/_blank.js"></script>
+    <div id="modalShadow" class="unshow"></div>
+    <div id="modalLoading" class="modal unshow"></div>
+    <script src='js/main.js'></script>
 </body>
 </html>

@@ -35,10 +35,11 @@ namespace Tenderfoot.Database.System
             this.Offset = offset;
         }
 
-        public void Paginate(int page, int itemCount)
+        public void Paginate(int page, int? itemCount = null)
         {
-            this.Limit = itemCount;
-            this.Offset = (page == 1) ? 0 : (page - 1) * itemCount;
+            var paginateCount = itemCount ?? TfSettings.Web.PaginateCount;
+            this.Limit = paginateCount;
+            this.Offset = (page == 1) ? 0 : (page - 1) * paginateCount;
         }
 
         /// <summary>

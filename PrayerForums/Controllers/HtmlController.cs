@@ -21,6 +21,14 @@ namespace PrayerForums.Controllers
             return this.View("report");
         }
 
+        [View("main")]
+        [HttpGet("details.html")]
+        public ActionResult GetDetails()
+        {
+            this.Initiate<GetDetailsModel>(false);
+            return this.View("details");
+        }
+
         [HttpGet("signin.html")]
         public ActionResult GetSignIn()
         {

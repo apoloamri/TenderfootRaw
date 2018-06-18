@@ -1,19 +1,22 @@
 ﻿<link rel="stylesheet" type="text/css" media="screen" href="css/details.css" />
 <div id="header"></div>
 <div id="details">
-    <h1 style="white-space:pre-line;">{{result.request}}</h1>
-    <p>A request by: <span>{{result.firstname}} {{result.lastname}}</span></p>
-    <h3>{{replyCount}} responses</h3><hr />
-    <div class="replies" v-for="reply in replies">
-        <div style="overflow:hidden;">
-            <div style="float:right;width:70%">
-                <p>
-                    {{reply.response}}<br /><br />
-                    <span>{{reply.firstname}}</span>
-                </p>
-            </div>
-        </div><hr />
-    </div>
+    <h1 style="white-space:pre-line;">@Model["result"].request</h1>
+    <p>A request by: <span>@Model["result"].firstname @Model["result"].lastname</span></p>
+    <h3>@Model["reply_count"] responses</h3><hr />
+    @foreach (var reply in Model["replies"])
+    {
+        <div class="replies">
+            <div style="overflow:hidden;">
+                <div style="float:right;width:70%">
+                    <p>
+                        @reply.response<br /><br />
+                        <span>@reply.firstname</span>
+                    </p>
+                </div>
+            </div><hr />
+        </div>
+    }
     <input v-model="lastname" type="text" placeholder="Last name" /><br />
     <input v-model="firstname" type="text" placeholder="First name" /><br />
     <input v-model="email" type="text" placeholder="Email address" /><br />

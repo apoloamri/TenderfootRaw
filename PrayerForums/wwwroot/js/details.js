@@ -71,6 +71,6 @@
         }
     },
     created: function () {
-        this.GetDetails();
+        //this.GetDetails();
     }
 });

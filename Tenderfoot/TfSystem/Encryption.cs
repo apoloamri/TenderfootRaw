@@ -1,6 +1,7 @@
 ﻿using System;
 using Tenderfoot.TfSystem.Diagnostics;
 using Tenderfoot.Tools;
+using Tenderfoot.Tools.Extensions;
 
 namespace Tenderfoot.TfSystem
 {
@@ -37,6 +38,11 @@ namespace Tenderfoot.TfSystem
 
         public static string Decrypt(string input, bool getFromConfig = false)
         {
+            if (input.IsEmpty())
+            {
+                return string.Empty;
+            }
+
             if (getFromConfig && TfSettings.Encryption.Active == false)
             {
                 return input;

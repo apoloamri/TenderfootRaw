@@ -1,0 +1,100 @@
+﻿<div id="header"></div>
+<center>
+    <div id="requests" style="margin:10px;width:90%">
+        <h1>Request List</h1>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name of requestor</th>
+                <th>Insertion time of the request</th>
+                <th>Email address of the requestor</th>
+                <th></th>
+            </tr>
+            <tr v-for="request in requests">
+                <td v-on:click="GoToDetails(request.id)">{{request.id}}</td>
+                <td v-on:click="GoToDetails(request.id)">{{request.lastname}} {{request.lastname}}</td>
+                <td v-on:click="GoToDetails(request.id)">{{request.insert_time}}</td>
+                <td v-on:click="GoToDetails(request.id)">{{request.email}}</td>
+                <td><button v-on:click="Delete(request.id)">DELETE</button></td>
+            </tr>
+        </table>
+        <div class="pager">
+            <center><h3>{{page}} / {{totalPages}}</h3></center>
+            <button v-on:click="PreviousPage()"><<</button>
+            <button v-on:click="NextPage()">>></button>
+        </div>
+    </div>
+</center>
+<script>
+    new Vue({
+        el: '#requests',
+        data: {
+            //INPUT
+            page: 1,
+            count: 10,
+            unanswered: false,
+
+            //OUTPUT
+            requests: [],
+            totalPages: 0
+        },
+        methods: {
+            GetData: function () {
+                return {
+                    "page": this.page,
+                    "count": this.count,
+                    "unanswered": this.unanswered
+                }
+            },
+            GetRequests: function () {
+                var that = this;
+                Get(
+                    url = "ministry/admin/requests/get",
+                    data = that.GetData(),
+                    ignoreWait = false,
+                    callback = function (data) {
+                        that.requests = data.requests;
+                        that.totalPages = data.total_pages;
+                    }
+                );
+            },
+            Delete: function (requestId) {
+                var that = this;
+                Delete(
+                    url = "ministry/admin/requests/delete",
+                    data = {
+                        "request_id": requestId
+                    },
+                    ignoreWait = false,
+                    callback = function (data) {
+                        window.location.reload();
+                    },
+                    error = function (data) {
+                        var response = data.responseJSON;
+                        alert(DisplayMessages(response.messages, false));
+                    }
+                );
+            },
+            GoToDetails: function (id) {
+                window.open("/details.html?request_id=" + id, "_blank");
+            },
+            NextPage: function () {
+                if (this.page == this.totalPages) {
+                    return;
+                }
+                this.page += 1;
+                this.GetRequests();
+            },
+            PreviousPage: function () {
+                if (this.page == 1) {
+                    return;
+                }
+                this.page -= 1;
+                this.GetRequests();
+            }
+        },
+        created: function () {
+            this.GetRequests();
+        }
+    });
+</script>

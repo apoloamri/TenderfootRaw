@@ -12,13 +12,14 @@ namespace Tenderfoot.Mvc
         {
             services.AddCors();
             services.AddMvc();
+            services.AddMemoryCache();
             services.Configure<RazorViewEngineOptions>(razor =>
             {
                 // {2} is area, {1} is controller,{0} is the action    
                 razor.ViewLocationFormats.Clear();
-                razor.ViewLocationFormats.Add("/wwwroot/{0}" + RazorViewEngine.ViewExtension);
                 razor.ViewLocationFormats.Add("/wwwroot/{1}/{0}" + RazorViewEngine.ViewExtension);
-                razor.ViewLocationFormats.Add("/wwwroot/Shared/{0}" + RazorViewEngine.ViewExtension);
+                razor.ViewLocationFormats.Add("/wwwroot/shared/{0}" + RazorViewEngine.ViewExtension);
+                razor.ViewLocationFormats.Add("/wwwroot/{0}" + RazorViewEngine.ViewExtension);
             });
         }
 

@@ -1,55 +1,51 @@
 ﻿using PrayerForums.Library;
 using PrayerForums.Library.Database;
+using PrayerForums.Library.Function.Interface;
 using System.ComponentModel.DataAnnotations;
 using Tenderfoot.Mvc;
-using Tenderfoot.TfSystem;
 
 namespace PrayerForums.Models.Member
 {
-    public class LoginMemberBase : TfBaseModel
+    public class LoginMemberLibrary : TfLibrary
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public Members Member { get; set; }
-
-        internal ValidationResult ValidateUsernameSession(string sessionIdValue)
+        internal ValidationResult ValidateUsernameSession(ILoginMember loginMember)
         {
             var members = _Schemas.Members;
-            members.Entity.username = sessionIdValue;
+            members.Entity.username = loginMember.SessionIdValue;
             members.Entity.active = EnumActive.Active;
             if (members.Count == 0)
             {
                 return TfValidationResult.Compose(
                     "SessionExpired",
-                    nameof(this.Username),
-                    nameof(this.Password));
+                    nameof(loginMember.Username),
+                    nameof(loginMember.Password));
             }
             return null;
         }
 
-        internal ValidationResult ValidateUsernamePassword()
+        internal ValidationResult ValidateUsernamePassword(ILoginMember loginMember)
         {
             var members = _Schemas.Members;
-            members.Entity.username = this.Username;
-            members.Entity.password = this.Password;
+            members.Entity.username = loginMember.Username;
+            members.Entity.password = loginMember.Password;
             if (members.Count == 0)
             {
                 return TfValidationResult.Compose(
                     "InvalidUsernamePassword",
-                    nameof(this.Username),
-                    nameof(this.Password));
+                    nameof(loginMember.Username),
+                    nameof(loginMember.Password));
             }
             return null;
         }
 
-        internal void GetMember(string sessionIdValue)
+        internal void GetMember(ILoginMember loginMember)
         {
             var members = _Schemas.Members;
-            members.Entity.username = sessionIdValue;
+            members.Entity.username = loginMember.SessionIdValue;
             members.Entity.active = EnumActive.Active;
             var member = members.Select.Entity;
-            this.Member = member;
-            this.Member.password = null;
+            loginMember.Member = member;
+            loginMember.Member.password = null;
         }
     }
 }

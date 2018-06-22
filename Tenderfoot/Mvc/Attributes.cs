@@ -2,6 +2,12 @@
 
 namespace Tenderfoot.Mvc
 {
+    [AttributeUsage(AttributeTargets.Class)]
+    public class CheckActiveSessionAttribute : Attribute { }
+
+    [AttributeUsage(AttributeTargets.Class)]
+    public class GetSessionAttribute : Attribute { }
+
     [AttributeUsage(AttributeTargets.Property)]
     public class InputAttribute : Attribute
     {

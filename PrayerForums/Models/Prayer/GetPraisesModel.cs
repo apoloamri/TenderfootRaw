@@ -41,7 +41,7 @@ namespace PrayerForums.Models.Prayer
                 dictionary["insert_time"] = item.insert_time?.ToString("MMMM dd, yyyy");
                 this.Result.Add(dictionary);
             }
-            this.TotalPages = praises.GetTotalPageCount(this.Count);
+            this.TotalPages = praises.PageCount(this.Count);
         }
     }
 }

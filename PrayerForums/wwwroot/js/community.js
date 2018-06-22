@@ -58,7 +58,8 @@ new Vue({
         page: 1,
         count: 10,
         totalPages: 0,
-        result: []
+        result: [],
+        totalRequests: 0
     },
     methods: {
         GetData: function () {
@@ -78,6 +79,7 @@ new Vue({
                 callback = function (data) {
                     that.result = data.result;
                     that.totalPages = data.total_pages
+                    that.totalRequests = data.total_requests
                 }
             );
         },

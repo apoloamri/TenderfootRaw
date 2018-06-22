@@ -66,6 +66,8 @@ namespace Tenderfoot.Mvc
                     return BaseValidationResult.ValidateAlphabet(value, memberNames);
                 case InputType.AlphaNumeric:
                     return BaseValidationResult.ValidateAlphaNumeric(value, memberNames);
+                case InputType.Boolean:
+                    return BaseValidationResult.ValidateBoolean(value, memberNames);
                 case InputType.Email:
                     return BaseValidationResult.ValidateEmail(value, memberNames);
                 case InputType.FileName:

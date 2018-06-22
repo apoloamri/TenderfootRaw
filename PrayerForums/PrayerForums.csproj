@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Configurations>Debug;Release;Test;Production</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,8 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Library\API\Models\" />
-    <Folder Include="Library\API\Controllers\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 

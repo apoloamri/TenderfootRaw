@@ -35,8 +35,9 @@ namespace Tenderfoot.Database.System
             this.Offset = offset;
         }
 
-        public void Paginate(int page, int? itemCount = null)
+        public void Paginate(int? page, int? itemCount = null)
         {
+            page = page ?? 1;
             var paginateCount = itemCount ?? TfSettings.Web.PaginateCount;
             this.Limit = paginateCount;
             this.Offset = (page == 1) ? 0 : (page - 1) * paginateCount;
@@ -148,6 +149,11 @@ namespace Tenderfoot.Database.System
             this.AddWhere(oper, statement);
             this.Parameters.Add(columnParameter, ConvertToSafe.Convert(value));
             this.ColumnCount++;
+        }
+
+        public void Exists<T>(Schema<T> schema, params Relation[] columnOn) where T : TfEntity, new()
+        {
+            this.ExistsBase(Operator.AND, schema, false, columnOn);
         }
 
         public void Exists<T>(Operator? oper, Schema<T> schema, params Relation[] columnOn) where T : TfEntity, new()

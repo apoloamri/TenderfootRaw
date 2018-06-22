@@ -24,6 +24,9 @@ namespace PrayerForums.Models.Prayer
         [Output]
         public int TotalPages { get; set; } = 0;
 
+        [Output]
+        public int TotalRequests { get; set; } = 0;
+
         public override IEnumerable<ValidationResult> Validate()
         {
             return null;
@@ -50,7 +53,8 @@ namespace PrayerForums.Models.Prayer
                 dictionary["insert_time"] = item.insert_time?.ToString("MMMM dd, yyyy");
                 this.Result.Add(dictionary);
             }
-            this.TotalPages = requests.GetTotalPageCount(this.Count);
+            this.TotalPages = requests.PageCount(this.Count);
+            this.TotalRequests = (int)requests.Count;
         }
 
         private bool IsAdmin()

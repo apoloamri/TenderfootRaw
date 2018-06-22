@@ -1,18 +1,22 @@
 ﻿using PrayerForums.Library.Database;
+using PrayerForums.Library.Function;
+using PrayerForums.Models.Prayer.Interface;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Tenderfoot.Mvc;
 
 namespace PrayerForums.Models.Prayer
 {
-    public class GetDetailsModel : TfModel<GetDetailsBase>
+    public class GetDetailsModel : 
+        TfModel<GetDetailsLibrary>,
+        IGetDetails
     {
         [Input]
         [RequireInput]
         public int? RequestId { get; set; }
 
         [Output]
-        public Requests Result { get; set; }
+        public Requests Requests { get; set; }
 
         [Output]
         public List<dynamic> Replies { get; set; }
@@ -20,18 +24,23 @@ namespace PrayerForums.Models.Prayer
         [Output]
         public int ReplyCount { get; set; } = 0;
 
+        public override void BeforeStartUp()
+        {
+            this.GetSessionCookies();
+        }
+
         public override IEnumerable<ValidationResult> Validate()
         {
             if (this.IsValidRequireInputs())
             {
-                yield return this.Library.ValidateRequestId();
+                yield return this.Library.ValidateRequestId(this);
             }
         }
 
         public override void MapModel()
         {
-            this.Library.GetRequest();
-            this.Library.GetReplies();
+            this.Library.GetRequest(this);
+            this.Library.GetReplies(this);
         }
     }
 }

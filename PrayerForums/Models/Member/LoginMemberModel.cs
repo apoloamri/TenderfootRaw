@@ -1,11 +1,14 @@
 ﻿using PrayerForums.Library.Database;
+using PrayerForums.Library.Function.Interface;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Tenderfoot.Mvc;
 
 namespace PrayerForums.Models.Member
 {
-    public class LoginMemberModel : TfModel<LoginMemberBase>
+    public class LoginMemberModel : 
+        TfModel<LoginMemberLibrary>,
+        ILoginMember
     {
         [Input]
         [RequireInput(HttpMethod.POST)]
@@ -25,7 +28,7 @@ namespace PrayerForums.Models.Member
                 yield return this.ValidateSession();
                 if (this.IsValidSession)
                 {
-                    yield return this.Library.ValidateUsernameSession(this.SessionIdValue);
+                    yield return this.Library.ValidateUsernameSession(this);
                 }
             }
 
@@ -33,14 +36,14 @@ namespace PrayerForums.Models.Member
             {
                 if (this.IsValidRequireInputs(HttpMethod.POST))
                 {
-                    yield return this.Library.ValidateUsernamePassword();
+                    yield return this.Library.ValidateUsernamePassword(this);
                 }
             }
         }
         
         public override void MapModel()
         {
-            this.Library.GetMember(this.SessionIdValue);
+            this.Library.GetMember(this);
         }
 
         public override void HandleModel()

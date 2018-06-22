@@ -1,0 +1,100 @@
+﻿<div id="header"></div>
+<center>
+    <div id="praises" style="margin:10px;width:90%">
+        <h1>Praise Report List</h1>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Insertion time</th>
+                <th>Email address</th>
+                <th></th>
+            </tr>
+            <tr v-for="praises in praises">
+                <td v-on:click="GoToDetails(praises.id)">{{praises.id}}</td>
+                <td v-on:click="GoToDetails(praises.id)">{{praises.lastname}} {{praises.lastname}}</td>
+                <td v-on:click="GoToDetails(praises.id)">{{praises.insert_time}}</td>
+                <td v-on:click="GoToDetails(praises.id)">{{praises.email}}</td>
+                <td><button v-on:click="Delete(praises.id)">DELETE</button></td>
+            </tr>
+        </table>
+        <div class="pager">
+            <center><h3>{{page}} / {{totalPages}}</h3></center>
+            <button v-on:click="PreviousPage()"><<</button>
+            <button v-on:click="NextPage()">>></button>
+        </div>
+    </div>
+</center>
+<script>
+    new Vue({
+        el: '#praises',
+        data: {
+            //INPUT
+            page: 1,
+            count: 10,
+            unanswered: false,
+
+            //OUTPUT
+            praises: [],
+            totalPages: 0
+        },
+        methods: {
+            GetData: function () {
+                return {
+                    "page": this.page,
+                    "count": this.count,
+                    "unanswered": this.unanswered
+                }
+            },
+            GetPraises: function () {
+                var that = this;
+                Get(
+                    url = "ministry/admin/praises/get",
+                    data = that.GetData(),
+                    ignoreWait = false,
+                    callback = function (data) {
+                        that.praises = data.praises;
+                        that.totalPages = data.total_pages;
+                    }
+                );
+            },
+            Delete: function (praisesId) {
+                var that = this;
+                Delete(
+                    url = "ministry/admin/praises/delete",
+                    data = {
+                        "praise_id": praisesId
+                    },
+                    ignoreWait = false,
+                    callback = function (data) {
+                        window.location.reload();
+                    },
+                    error = function (data) {
+                        var response = data.responseJSON;
+                        alert(DisplayMessages(response.messages, false));
+                    }
+                );
+            },
+            GoToDetails: function (id) {
+                window.open("/report.html?praise_id=" + id, "_blank");
+            },
+            NextPage: function () {
+                if (this.page == this.totalPages) {
+                    return;
+                }
+                this.page += 1;
+                this.GetPraises();
+            },
+            PreviousPage: function () {
+                if (this.page == 1) {
+                    return;
+                }
+                this.page -= 1;
+                this.GetPraises();
+            }
+        },
+        created: function () {
+            this.GetPraises();
+        }
+    });
+</script>

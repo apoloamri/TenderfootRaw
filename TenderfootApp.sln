@@ -3,40 +3,28 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TenderfootApp", "TenderfootApp\TenderfootApp.csproj", "{8E97F274-5F9F-4158-9A1B-99B3DB7F074A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{44923FDF-1AC3-4F75-9731-0B974607D397}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{7ACC7927-453B-48EC-BF3C-37D5B921547D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tenderfoot", "Tenderfoot\Tenderfoot.csproj", "{2EFE2809-5F77-48BA-8E86-EAD8558EF929}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrayerForums", "PrayerForums\PrayerForums.csproj", "{32A5F094-EB74-44E0-87D8-F408CD232295}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrayerForums", "PrayerForums\PrayerForums.csproj", "{32A5F094-EB74-44E0-87D8-F408CD232295}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8E97F274-5F9F-4158-9A1B-99B3DB7F074A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8E97F274-5F9F-4158-9A1B-99B3DB7F074A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8E97F274-5F9F-4158-9A1B-99B3DB7F074A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8E97F274-5F9F-4158-9A1B-99B3DB7F074A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2EFE2809-5F77-48BA-8E86-EAD8558EF929}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2EFE2809-5F77-48BA-8E86-EAD8558EF929}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2EFE2809-5F77-48BA-8E86-EAD8558EF929}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2EFE2809-5F77-48BA-8E86-EAD8558EF929}.Release|Any CPU.Build.0 = Release|Any CPU
 		{32A5F094-EB74-44E0-87D8-F408CD232295}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{32A5F094-EB74-44E0-87D8-F408CD232295}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{32A5F094-EB74-44E0-87D8-F408CD232295}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{32A5F094-EB74-44E0-87D8-F408CD232295}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{8E97F274-5F9F-4158-9A1B-99B3DB7F074A} = {44923FDF-1AC3-4F75-9731-0B974607D397}
 		{2EFE2809-5F77-48BA-8E86-EAD8558EF929} = {7ACC7927-453B-48EC-BF3C-37D5B921547D}
 		{32A5F094-EB74-44E0-87D8-F408CD232295} = {44923FDF-1AC3-4F75-9731-0B974607D397}
 	EndGlobalSection

@@ -1,8 +1,8 @@
 ﻿<link rel="stylesheet" type="text/css" media="screen" href="css/details.css" />
 <div id="header"></div>
 <div id="details">
-    <h1 style="white-space:pre-line;">@Model["result"].request</h1>
-    <p>A request by: <span>@Model["result"].firstname @Model["result"].lastname</span></p>
+    <h1 style="white-space:pre-line;">@Model["requests"].request</h1>
+    <p>A request by: <span>@Model["requests"].firstname @Model["requests"].lastname</span></p>
     <h3>@Model["reply_count"] responses</h3><hr />
     @foreach (var reply in Model["replies"])
     {
@@ -26,7 +26,7 @@
         <center>
             <div v-if="valid == true">
                 <p>Your reply has been sent, {{firstname}}.</p>
-                <button v-on:click="GetDetails()">Close</button>
+                <button onclick="window.location.reload()">Close</button>
             </div>
             <div v-else>
                 <p v-html="messages"></p>
@@ -35,4 +35,56 @@
         </center>
     </div>
 </div>
-<script src="js/details.js"></script>
+<script>
+    var details = new Vue({
+        el: '#details',
+        data: {
+            //INPUT
+            requestId: GetParameterByName("request_id"),
+            lastname: "",
+            firstname: "",
+            email: "",
+            response: "",
+
+            //OUPUT
+            valid: false,
+            messages: ""
+        },
+        methods: {
+            GetData: function () {
+                return {
+                    "session_id": GetCookie("session_id"),
+                    "session_key": GetCookie("session_key"),
+                    "response": {
+                        "request_id": this.requestId,
+                        "lastname": this.lastname,
+                        "firstname": this.firstname,
+                        "email": this.email,
+                        "response": this.response
+                    },
+                    "request_id": this.requestId
+                }
+            },
+            SendResponse: function () {
+                var that = this;
+                that.valid = false;
+                ShowModal("modalLoading");
+                Post(
+                    url = "prayer/reply",
+                    data = that.GetData(),
+                    ignoreWait = false,
+                    callback = function (data) {
+                        that.valid = true;
+                        that.response = "";
+                        ShowModal("modalMessage");
+                    },
+                    error = function (data) {
+                        var response = data.responseJSON;
+                        that.messages = DisplayMessages(response.messages, true);
+                        ShowModal("modalMessage");
+                    }
+                );
+            }
+        }
+    });
+</script>

@@ -1,0 +1,55 @@
+﻿<div id="header"></div>
+<center>
+    <div id="devotion" style="margin:10px;width:90%">
+        <h1>Update devotional message</h1>
+        <input type="text" v-model="title" placeholder="Title" />
+        <textarea v-model="message" placeholder="Devotional message..."></textarea>
+        <button v-on:click="UpdateDevotion()">Update devotion</button>
+        <div id="devotionModalMessage" class="modal unshow" style="width:300px;bottom:inherit;padding:5%">
+            <p v-html="messages"></p>
+            <button onclick="HideModal()">Close</button>
+        </div>
+    </div>
+</center>
+<script>
+    new Vue({
+        el: '#devotion',
+        data: {
+            //INPUT
+            title: "@Model["devotional_message"].title",
+            message: "@Model["devotional_message"].message",
+
+            //OUTPUT
+            messages: ""
+        },
+        methods: {
+            GetData: function () {
+                return {
+                    "devotion": {
+                        "title": this.title,
+                        "message": this.message
+                    }
+                }
+            },
+            UpdateDevotion: function () {
+                var that = this;
+                ShowModal("modalLoading");
+                Post(
+                    url = "ministry/admin/devote",
+                    data = that.GetData(),
+                    ignoreWait = false,
+                    callback = function (data) {
+                        that.valid = true;
+                        that.messages = "Update successful!";
+                        ShowModal("devotionModalMessage");
+                    },
+                    error = function (data) {
+                        var response = data.responseJSON;
+                        that.messages = DisplayMessages(response.messages, true);
+                        ShowModal("devotionModalMessage");
+                    }
+                );
+            }
+        }
+    });
+</script>

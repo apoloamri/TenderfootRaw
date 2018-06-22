@@ -1,6 +1,6 @@
 ﻿function Logout() {
     DeleteCookies();
-    window.location = "index.html";
+    window.location = "/index.html";
 }
 
 var navigation = new Vue({
@@ -8,7 +8,8 @@ var navigation = new Vue({
     data: {
         sessionId: GetCookie("session_id"),
         sessionKey: GetCookie("session_key"),
-        isLoggedIn: false
+        isLoggedIn: false,
+        isAdmin: false
     },
     methods: {
         GetData: function () {
@@ -25,6 +26,7 @@ var navigation = new Vue({
                 ignoreWait = true,
                 callback = function (data) {
                     that.isLoggedIn = true;
+                    that.isAdmin = (data.member.admin == 1);
 
                     // request.js
                     if (typeof request !== "undefined") {

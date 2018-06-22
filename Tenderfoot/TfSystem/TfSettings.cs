@@ -12,16 +12,23 @@ namespace Tenderfoot.TfSystem
         {
             if (fileName.IsEmpty())
             {
-                string deployment = Deploy.Deployment;
-                string deploymentString = deployment.IsEmpty() || getDefault ? "" : $".{deployment}";
-                fileName = $"appsettings{deploymentString}.json";
+                var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                environmentName = (environmentName.IsEmpty()) || getDefault ? string.Empty : $".{environmentName}";
+                fileName = $"appsettings{environmentName}.json";
             }
 
-            var configurationBuilder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile(fileName, optional: true, reloadOnChange: true);
+            var cacheKey = $"tfconfiguration.{fileName}";
+            var memoryCache = TfMemoryCache.Get<IConfigurationRoot>(cacheKey);
+            if (memoryCache != null)
+            {
+                return memoryCache;
+            }
 
-            return configurationBuilder.Build();
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile(fileName, optional: true, reloadOnChange: true)
+                .Build();
+            return TfMemoryCache.Set(cacheKey, configuration);
         }
 
         private static string GetSettingsBase(string fileName, string[] settings, bool getDefault = false)

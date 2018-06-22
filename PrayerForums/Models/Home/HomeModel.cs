@@ -1,22 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using PrayerForums.Function;
+using PrayerForums.Library.Database;
+using PrayerForums.Library.Function.Interface;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Tenderfoot.Mvc;
 
-namespace TenderfootApp.Models.Home
+namespace PrayerForums.Models.Home
 {
-    public class HomeModel : TfModel
+    public class HomeModel : TfModel<AdminModelLibrary>, IAdmin
     {
         [Output]
-        public string Result { get; set; }
-
+        public Devotions DevotionalMessage { get; set; }
+        
         public override IEnumerable<ValidationResult> Validate()
         {
             return null;
         }
-
+        
         public override void MapModel()
         {
-            this.Result = "Hello World.";
+            this.Library.GetDevotionalMessage(this);
         }
     }
 }

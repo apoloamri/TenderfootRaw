@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Send your prayer requests, share your testimonies, spread the word of God." />
+    <title>Prayer Forums</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='stylesheet' type='text/css' media='screen' href='@Model["site_url"]/css/common/site.css' />
+    <link rel='stylesheet' type='text/css' media='screen' href='@Model["site_url"]/css/common/modal.css' />
+    <script src='@Model["site_url"]/js/lib/jquery-3.3.1.js'></script>
+    <script src='@Model["site_url"]/js/lib/vue.js'></script>
+    <script src='@Model["site_url"]/js/common/site.js'></script>
+    <script src='@Model["site_url"]/js/common/modal.js'></script>
+</head>
+<body>
+    <header>
+        <div></div>
+        <nav id="navigation">
+            <a href='/index.html'>HOME</a>
+            <a href='/ministry/admin/'>DASHBOARD</a>
+            <a href='/ministry/admin/events'>EVENTS</a>
+            <a href='/ministry/admin/ministry'>MINISTRY</a>
+            <a href='/ministry/admin/requests'>REQUESTS</a>
+            <a href='/ministry/admin/praises'>PRAISES</a>
+            <span v-if="isLoggedIn == true"><a href="#" onclick="Logout()">LOG OUT</a></span>
+            <span v-else><a href="signup.html">SIGN UP</a></span>
+        </nav>
+    </header>
+    @Html.Partial((string)ViewBag.BodyView)
+    <footer>
+        
+    </footer>
+    <div id="modalShadow" class="unshow"></div>
+    <div id="modalLoading" class="modal unshow"></div>
+    <script src='@Model["site_url"]/js/main.js'></script>
+</body>
+</html>

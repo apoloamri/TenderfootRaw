@@ -25,7 +25,6 @@
             <input v-model="password" type="password" placeholder="Password" />
             <button v-on:click="Login()">SIGN IN</button><br />
             <button onclick="FbLogin()" style="background-color:#4267B2">FACEBOOK LOGIN</button><br />
-            <!--<fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button>-->
             <p>Don't have an account yet? <a href="signup.html">Sign Up</a>.</p>
             <div id="modalMessage" class="modal unshow" style="width:300px;bottom:inherit;padding:5%">
                 <p v-html="messages"></p>

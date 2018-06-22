@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,10 +9,21 @@ using Tenderfoot.TfSystem;
 
 namespace Tenderfoot.Mvc
 {
-    public abstract class TfModel<T> : TfModel where T : TfBaseModel, new()
+    public abstract class TfModel<T> : TfModel
+        where T : TfLibrary, new()
     {
         public override bool HasLibrary => true;
         public T Library { get; set; } = new T();
+
+        //public override void MapModel()
+        //{
+        //    this.Library.MapModel(this);
+        //}
+
+        //public override void HandleModel()
+        //{
+        //    this.Library.HandleModel(this);
+        //}
 
         public void SetModelToLibrary()
         {
@@ -131,7 +143,23 @@ namespace Tenderfoot.Mvc
             this.SessionId = Session.AddSession(sessionId, out string sessionKey);
             this.SessionKey = sessionKey;
         }
-        
+
+        public void GetSessionCookies()
+        {
+            this.SessionId = this.Controller.ControllerContext.HttpContext.Request.Cookies["session_id"];
+            this.SessionKey = this.Controller.ControllerContext.HttpContext.Request.Cookies["session_key"];
+        }
+
+        public void SetSessionCookies()
+        {
+            var cookieOptions = new CookieOptions()
+            {
+                Expires = DateTime.Now.AddMinutes(TfSettings.Web.SessionTimeOut)
+            };
+            this.Controller.ControllerContext.HttpContext.Response.Cookies.Append("session_id", this.SessionId, cookieOptions);
+            this.Controller.ControllerContext.HttpContext.Response.Cookies.Append("session_key", this.SessionKey, cookieOptions);
+        }
+
         public void StopProcess()
         {
             this.Stop = true;

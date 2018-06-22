@@ -1,34 +1,35 @@
 ﻿using PrayerForums.Library.Database;
+using PrayerForums.Library.Function;
+using PrayerForums.Models.Prayer.Interface;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Tenderfoot.Mvc;
 
 namespace PrayerForums.Models.Prayer
 {
-    public class InsertReplyModel : TfModel<InsertReplyBase>
+    public class InsertReplyModel : 
+        TfModel<InsertReplyLibrary>,
+        IInsertReply
     {
         [Input]
         [Output]
         public Replies Response { get; set; } = new Replies();
 
-        public GetDetailsBase DetailsBase { get; set; }
-
-        public override void BeforeStartUp()
-        {
-            this.DetailsBase = new GetDetailsBase() { RequestId = this.Response.request_id };
-        }
-
+        private readonly GetDetailsLibrary getDetailsLibrary;
+        private readonly IGetDetails getDetails;
+        
         public override IEnumerable<ValidationResult> Validate()
         {
             if (this.IsValidRequireInputs())
             {
-                yield return this.DetailsBase.ValidateRequestId();
+                getDetails.RequestId = this.Response.request_id;
+                yield return getDetailsLibrary.ValidateRequestId(getDetails);
             }
         }
 
         public override void HandleModel()
         {
-            this.Library.InsertReply();
+            this.Library.InsertReply(this);
         }
     }
 }

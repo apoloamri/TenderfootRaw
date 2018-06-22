@@ -1,61 +1,59 @@
 ﻿using PrayerForums.Library;
 using PrayerForums.Library.Database;
+using PrayerForums.Library.Function.Interface;
 using System.ComponentModel.DataAnnotations;
 using Tenderfoot.Mvc;
 using Tenderfoot.Net;
-using Tenderfoot.TfSystem;
 using Tenderfoot.Tools;
 
 namespace PrayerForums.Models.Member
 {
-    public class InsertMemberBase : TfBaseModel
+    public class InsertMemberLibrary : TfLibrary
     {
-        public Members Member { get; set; }
-
-        internal ValidationResult ValidateEmail()
+        internal ValidationResult ValidateEmail(IInsertMember insertMember)
         {
             var members = _Schemas.Members;
-            members.Entity.email = this.Member.email;
+            members.Entity.email = insertMember.Member.email;
             members.Entity.active = EnumActive.Active;
             if (members.Count > 0)
             {
                 return TfValidationResult.Compose(
                     "InvalidDuplicate",
-                    new[] { this.Member.email },
-                    nameof(this.Member.email));
+                    new[] { insertMember.Member.email },
+                    nameof(insertMember.Member.email));
             }
             return null;
         }
 
-        internal ValidationResult ValidateUsername()
+        internal ValidationResult ValidateUsername(IInsertMember insertMember)
         {
             var members = _Schemas.Members;
-            members.Entity.username = this.Member.username;
+            members.Entity.username = insertMember.Member.username;
             members.Entity.active = EnumActive.Active;
             if (members.Count > 0)
             {
                 return TfValidationResult.Compose(
                     "InvalidDuplicate",
-                    new[] { this.Member.username },
-                    nameof(this.Member.username));
+                    new[] { insertMember.Member.username },
+                    nameof(insertMember.Member.username));
             }
             return null;
         }
 
-        internal void InsertMember()
+        internal void InsertMember(IInsertMember insertMember)
         {
-            this.Member.activation_key = KeyGenerator.GetUniqueKey(100);
+            insertMember.Member.activation_key = KeyGenerator.GetUniqueKey(100);
             var members = _Schemas.Members;
-            members.Entity.SetValuesFromModel(this.Member, false);
+            members.Entity.SetValuesFromModel(insertMember.Member, false);
             members.Insert();
         }
 
-        internal void SendEmail()
+        internal void SendEmail(IInsertMember insertMember)
         {
             TfEmail.Send(
                 "MemberRegister",
-                this.Member.email,
-                this.Member.ToDictionary());
+                insertMember.Member.email,
+                insertMember.Member.ToDictionary());
         }
     }
 }

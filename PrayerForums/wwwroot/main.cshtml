@@ -5,14 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Send your prayer requests, share your testimonies, spread the word of God." />
     <title>Prayer Forums</title>
-    @*@if (Model.ContainsKey("result"))
+    @if (Model.ContainsKey("details"))
     {
         <!--Facebook Open Graph-->
-        <meta property="og:title" content='@Model["result"].title' />
-        <meta property="og:description" content='@Model["result"].message' />
-        <meta property="og:image" content='@Model["result"].image_url' />
+        <meta property="og:title" content='@Model["details"].title' />
+        <meta property="og:description" content='@Model["details"].message' />
+        <meta property="og:image" content='@Model["details"].image_url' />
         <!--Facebook Open Graph-->
-    }*@
+    }
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel='stylesheet' type='text/css' media='screen' href='css/common/site.css' />
     <link rel='stylesheet' type='text/css' media='screen' href='css/common/modal.css' />
@@ -28,11 +28,12 @@
             <a href='index.html'>HOME</a>
             <a href='community.html'>COMMUNITY</a>
             <a href='contact.html'>CONTACT</a>
+            <span v-if="isAdmin == true"><a href="ministry/admin">MINISTRY PAGE</a></span>
             <span v-if="isLoggedIn == true"><a href="#" onclick="Logout()">LOG OUT</a></span>
             <span v-else><a href="signup.html">SIGN UP</a></span>
         </nav>
     </header>
-    @Html.Partial((string)ViewBag.PartialView)
+    @Html.Partial((string)ViewBag.BodyView)
     <footer>
         <div id="footerContent">
             <div class="row">

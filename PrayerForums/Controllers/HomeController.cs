@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PrayerForums.Models.Home;
 using Tenderfoot.Mvc;
-using TenderfootApp.Models.Home;
 
-namespace TenderfootApp.Controllers
+namespace PrayerForums.Controllers
 {
     [Route("home")]
     public class HomeController : TfController

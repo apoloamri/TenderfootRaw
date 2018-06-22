@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <RootNamespace>Tenderfoot</RootNamespace>
     <AssemblyName>Tenderfoot</AssemblyName>
+    <Configurations>Debug;Release;Test;Production</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

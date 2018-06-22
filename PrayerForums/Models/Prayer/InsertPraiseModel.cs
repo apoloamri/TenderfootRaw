@@ -51,7 +51,7 @@ namespace PrayerForums.Models.Prayer
 
             File.Move(oldPath, newPath);
 
-            return $"{TfSettings.Web.ApiUrl}/{newPath.Replace("\\", "/")}";
+            return $"{TfSettings.Web.SiteUrl}/{newPath.Replace("\\", "/").Replace("wwwroot/", "")}";
         }
     }
 }

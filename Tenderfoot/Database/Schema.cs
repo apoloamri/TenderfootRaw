@@ -140,8 +140,9 @@ namespace Tenderfoot.Database
         public virtual bool HasRecords => this.Count > 0;
         public virtual bool HasRecord => this.Count == 1;
 
-        public int GetTotalPageCount(int count)
+        public int PageCount(int? count)
         {
+            count = count ?? 1;
             return (int)Math.Ceiling(((decimal)this.Count / (decimal)count));
         }
 
@@ -201,7 +202,7 @@ namespace Tenderfoot.Database
         public int Delete()
         {
             var count = this.ExecuteNonQuery(
-                $"{Operations.DELETE} FROM {this.TableName} {this.GetWhere(null, true)};",
+                $"{Operations.DELETE} FROM {this.TableName} {this.GetWhere(null, false)};",
                 this.Case.Parameters,
                 Operations.DELETE
                 );

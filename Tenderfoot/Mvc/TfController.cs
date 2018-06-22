@@ -49,15 +49,9 @@ namespace Tenderfoot.Mvc
                     this.GetQueries(obj);
                     this.ModelObject = this.ModelDictionary.ToClass<Model>();
                 }
-                
-                this.ModelObject.BeforeStartUp();
-
-                if (this.ModelObject.HasLibrary)
-                {
-                    this.ModelObject.SetModelToLibrary();
-                }
 
                 this.GetNecessities();
+                this.ModelObject.BeforeStartUp();
                 this.ValidateModel();
                 this.ModelObject.OnStartUp();
             }
@@ -78,8 +72,27 @@ namespace Tenderfoot.Mvc
         {
             var validationDictionary = new Dictionary<string, object>();
 
+            var controllerType = this.GetType();
+            if (controllerType.GetCustomAttribute<GetSessionAttribute>() is GetSessionAttribute)
+            {
+                this.ModelObject.GetSessionCookies();
+            }
+
             this.ValidateProperties(this.ModelObject, ref validationDictionary);
 
+            var checkSessionAttribute = controllerType.GetCustomAttribute<CheckActiveSessionAttribute>() as CheckActiveSessionAttribute;
+            if (checkSessionAttribute != null)
+            {
+                var validate = this.ModelObject.ValidateSession() as ValidationResult;
+                if (validate != null)
+                {
+                    foreach (var memberName in validate.MemberNames)
+                    {
+                        this.AddModelErrors(memberName, validate, ref validationDictionary);
+                    }
+                }
+            }
+            
             if (this.ModelObject.Validate() is IEnumerable<ValidationResult> validationResults)
             {
                 foreach (var result in validationResults)
@@ -89,22 +102,21 @@ namespace Tenderfoot.Mvc
                         continue;
                     }
 
-                    foreach (var name in result.MemberNames)
+                    foreach (var memberName in result.MemberNames)
                     {
-                        this.AddModelErrors(name, result, ref validationDictionary);
+                        this.AddModelErrors(memberName, result, ref validationDictionary);
                     }
                 }
             }
 
-            var jsonDictionary = new Dictionary<string, object>();
-
+            var returnDictionary = new Dictionary<string, object>();
             if (validationDictionary.Count() > 0)
             {
-                jsonDictionary.Add("is_valid", false);
-                jsonDictionary.Add("messages", validationDictionary);
+                returnDictionary.Add("is_valid", false);
+                returnDictionary.Add("messages", validationDictionary);
             }
 
-            this.JsonResult = base.Json(jsonDictionary, this.JsonSettings);
+            this.JsonResult = base.Json(returnDictionary, this.JsonSettings);
         }
 
         private void ValidateProperties(dynamic model, ref Dictionary<string, object> validationDictionary)
@@ -188,23 +200,7 @@ namespace Tenderfoot.Mvc
                 }
             }
         }
-
-        private void ExecuteMapping()
-        {
-            if (this.ModelObject.Mapping)
-            {
-                this.ModelObject.MapModel();
-            }
-        }
-
-        private void ExecuteHandling()
-        {
-            if (this.ModelObject.Handling)
-            {
-                this.ModelObject.HandleModel();
-            }
-        }
-
+        
         private void BuildModelDictionary()
         {
             var jsonDictionary = new Dictionary<string, object>();
@@ -249,14 +245,14 @@ namespace Tenderfoot.Mvc
                     this.ModelObject.Stop == false &&
                     this.ModelState.IsValid)
                 {
-                    this.ExecuteMapping();
-                    this.ExecuteHandling();
-
-                    if (this.ModelObject.HasLibrary)
+                    if (this.ModelObject.Mapping)
                     {
-                        this.ModelObject.SetLibraryToModel();
+                        this.ModelObject.MapModel();
                     }
-
+                    if (this.ModelObject.Handling)
+                    {
+                        this.ModelObject.HandleModel();
+                    }
                     this.BuildModelDictionary();
                     this.Response.StatusCode = (int)HttpStatusCode.OK;
                 }
@@ -315,7 +311,7 @@ namespace Tenderfoot.Mvc
                         var attribute = property.GetCustomAttribute<ViewAttribute>();
                         if (attribute != null)
                         {
-                            this.ViewBag.PartialView = viewName;
+                            this.ViewBag.BodyView = viewName;
                             viewName = (attribute as ViewAttribute).ViewName;
                         }
                     }

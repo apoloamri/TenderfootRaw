@@ -23,7 +23,20 @@ namespace Tenderfoot.Mvc.System
                 value,
                 memberNames);
         }
-        
+
+        public static ValidationResult ValidateBoolean(object value, string[] memberNames)
+        {
+            if (value is bool ||
+                (value as string) == "true" ||
+                (value as string) == "false" ||
+                (value as int?) == 1 ||
+                (value as int?) == 0)
+            {
+                return null;
+            }
+            return TfValidationResult.Compose("InvalidInput", memberNames, memberNames);
+        }
+
         public static ValidationResult ValidateEmail(object value, string[] memberNames)
         {
             return Validate(

@@ -9,21 +9,19 @@ using Tenderfoot.TfSystem;
 
 namespace Tenderfoot.Mvc
 {
-    public abstract class TfModel<T> : TfModel
+    public abstract class TfModel<T> : TfModel, ITfModel
         where T : TfLibrary, new()
     {
         public override bool HasLibrary => true;
         public T Library { get; set; } = new T();
-
-        //public override void MapModel()
-        //{
-        //    this.Library.MapModel(this);
-        //}
-
-        //public override void HandleModel()
-        //{
-        //    this.Library.HandleModel(this);
-        //}
+        
+        public override IEnumerable<ValidationResult> AutoValidate()
+        {
+            foreach (var validateResult in this.Library.AutoValidate(this))
+            {
+                yield return validateResult;
+            }
+        }
 
         public void SetModelToLibrary()
         {
@@ -39,7 +37,8 @@ namespace Tenderfoot.Mvc
     public abstract class TfModel : TfBaseModel
     {
         public abstract IEnumerable<ValidationResult> Validate();
-        
+        public virtual IEnumerable<ValidationResult> AutoValidate() { return null; }
+
         public string Host { get; set; }
         public Controller Controller { get; set; }
         public HttpMethod Method { get; set; }
@@ -65,8 +64,8 @@ namespace Tenderfoot.Mvc
         public virtual bool HasLibrary => false;
         public virtual void BeforeStartUp() { }
         public virtual void OnStartUp() { }
-        public virtual void MapModel() { throw new NotImplementedException(); }
-        public virtual void HandleModel() { throw new NotImplementedException(); }
+        public virtual void MapModel() { }
+        public virtual void HandleModel() { }
 
         public bool IsValid(params string[] fieldNames)
         {

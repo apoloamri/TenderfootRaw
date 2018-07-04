@@ -14,14 +14,14 @@ namespace PrayerForums.Controllers
         public ActionResult GetAdmin()
         {
             this.Initiate<GetAdminModel>(false);
-            return this.View("index");
+            return this.Page("index");
         }
 
         [HttpGet("{pageName}")]
         [View("main")]
         public ActionResult GetAdminPages(string pageName)
         {
-            return this.View(pageName);
+            return this.Page(pageName);
         }
 
         [HttpPost("devote")]

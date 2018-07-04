@@ -1,7 +1,18 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Tenderfoot.Mvc
 {
+    [AttributeUsage(AttributeTargets.Property)]
+    public class BaseAttribute : Attribute
+    {
+        public virtual ValidationResult Validate(string propertyName, object value, HttpMethod method, ref bool isValidated)
+        {
+            return null;
+        }
+    }
+
     [AttributeUsage(AttributeTargets.Class)]
     public class CheckActiveSessionAttribute : Attribute { }
 
@@ -9,7 +20,7 @@ namespace Tenderfoot.Mvc
     public class GetSessionAttribute : Attribute { }
 
     [AttributeUsage(AttributeTargets.Property)]
-    public class InputAttribute : Attribute
+    public class InputAttribute : BaseAttribute
     {
         public InputType? InputType { get; set; }
         public int? Length { get; set; }
@@ -22,6 +33,28 @@ namespace Tenderfoot.Mvc
         {
             this.InputType = inputType;
             this.Length = length;
+        }
+        public override ValidationResult Validate(string propertyName, object value, HttpMethod method, ref bool isValidated)
+        {
+            if (this.InputType.HasValue)
+            {
+                var result = TfValidationResult.Input(this.InputType.Value, value, propertyName);
+                if (result != null)
+                {
+                    isValidated = true;
+                    return result;
+                }
+            }
+            if (this.Length.HasValue)
+            {
+                var result = TfValidationResult.Length(this.Length.Value, value, propertyName);
+                if (result != null)
+                {
+                    isValidated = true;
+                    return result;
+                }
+            }
+            return null;
         }
     }
 
@@ -39,13 +72,38 @@ namespace Tenderfoot.Mvc
     }
 
     [AttributeUsage(AttributeTargets.Property)]
-    public class RequireInputAttribute : Attribute
+    public class RequireInputAttribute : BaseAttribute
     {
         public HttpMethod[] Method { get; set; }
         public RequireInputAttribute() { }
         public RequireInputAttribute(params HttpMethod[] method)
         {
             this.Method = method;
+        }
+        public override ValidationResult Validate(string propertyName, object value, HttpMethod method, ref bool isValidated)
+        {
+            if (this.Method != null)
+            {
+                var result = TfValidationResult.FieldRequired(propertyName, value);
+                if (this.Method.ToList().Contains(method))
+                {
+                    if (result != null)
+                    {
+                        isValidated = true;
+                        return result;
+                    }
+                }
+            }
+            else
+            {
+                var result = TfValidationResult.FieldRequired(propertyName, value);
+                if (result != null)
+                {
+                    isValidated = true;
+                    return result;
+                }
+            }
+            return null;
         }
     }
 }

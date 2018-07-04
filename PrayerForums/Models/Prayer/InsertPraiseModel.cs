@@ -1,4 +1,4 @@
-﻿using PrayerForums.Library.Database;
+﻿using PrayerForumsLibrary.Database;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;

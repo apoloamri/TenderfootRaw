@@ -10,7 +10,7 @@ namespace PrayerForums.Controllers
         [HttpGet("{viewName}.html")]
         public ActionResult GetView(string viewName)
         {
-            return this.View(viewName);
+            return this.Page(viewName);
         }
 
         [View("main")]
@@ -18,7 +18,7 @@ namespace PrayerForums.Controllers
         public ActionResult GetReport()
         {
             this.Initiate<GetReportModel>(false);
-            return this.View("report");
+            return this.Page("report");
         }
 
         [View("main")]
@@ -26,13 +26,13 @@ namespace PrayerForums.Controllers
         public ActionResult GetDetails()
         {
             this.Initiate<GetDetailsModel>(false);
-            return this.View("details");
+            return this.Page("details");
         }
 
         [HttpGet("signin.html")]
         public ActionResult GetSignIn()
         {
-            return this.View("signin");
+            return this.Page("signin");
         }
     }
 }

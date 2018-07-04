@@ -275,46 +275,7 @@ namespace Tenderfoot.Database.System
 
             foreach (var attribute in attributes)
             {
-                if (attribute is LengthAttribute)
-                {
-                    var attr = attribute as LengthAttribute;
-                    attributeString = $"({attr.LengthCount}) ";
-                }
-
-                if (attribute is NotNullAttribute)
-                {
-                    var attr = attribute as NotNullAttribute;
-                    attributeString += $"{ColumnAttributes.NOT_NULL.GetString()} ";
-                }
-
-                if (attribute is DefaultAttribute)
-                {
-                    var attr = attribute as DefaultAttribute;
-                    
-                    if (!attr.DefaultObject.IsEmpty())
-                    {
-                        attributeString += $"DEFAULT ";
-
-                        if (attr.DefaultObject.Contains("(") && attr.DefaultObject.Contains(")"))
-                        {
-                            attributeString += $"{attr.DefaultObject}";
-                        }
-                        else
-                        {
-                            attributeString += $"'{attr.DefaultObject}'";
-                        }
-                    }
-                }
-
-                if (attribute is PrimaryKeyAttribute)
-                {
-                    attributeString += $"{ColumnAttributes.PRIMARY_KEY.GetString()} ";
-                }
-
-                if (attribute is UniqueAttribute)
-                {
-                    attributeString += $"{ColumnAttributes.UNIQUE} ";
-                }
+                attributeString += (attribute as BaseAttribute)?.GetValue();
             }
 
             return attributeString;
@@ -360,9 +321,7 @@ namespace Tenderfoot.Database.System
         /// <returns>The column name.</returns>
         public TableColumn Column<TProp>(Expression<Func<T, TProp>> expression)
         {
-            var body = expression.Body as MemberExpression;
-            
-            if (body == null)
+            if (!(expression.Body is MemberExpression body))
             {
                 return null;
             }

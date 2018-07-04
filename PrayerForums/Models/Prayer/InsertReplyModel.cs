@@ -1,6 +1,6 @@
-﻿using PrayerForums.Library.Database;
-using PrayerForums.Library.Function;
-using PrayerForums.Models.Prayer.Interface;
+﻿using PrayerForumsLibrary;
+using PrayerForumsLibrary.Database;
+using PrayerForumsLibrary.Interfaces;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Tenderfoot.Mvc;
@@ -15,15 +15,21 @@ namespace PrayerForums.Models.Prayer
         [Output]
         public Replies Response { get; set; } = new Replies();
 
-        private readonly GetDetailsLibrary getDetailsLibrary;
-        private readonly IGetDetails getDetails;
-        
+        [RequireInput]
+        public int? RequestId { get; set; }
+
+        public Requests Requests { get; set; }
+
+        public override void BeforeStartUp()
+        {
+            this.RequestId = this.Response.request_id;
+        }
+
         public override IEnumerable<ValidationResult> Validate()
         {
             if (this.IsValidRequireInputs())
             {
-                getDetails.RequestId = this.Response.request_id;
-                yield return getDetailsLibrary.ValidateRequestId(getDetails);
+                yield return new GetDetailsLibrary().ValidateRequestId(this);
             }
         }
 

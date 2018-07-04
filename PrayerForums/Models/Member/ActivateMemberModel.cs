@@ -1,5 +1,5 @@
-﻿using PrayerForums.Library;
-using PrayerForums.Library.Database;
+﻿using PrayerForumsLibrary.Database;
+using PrayerForumsLibrary.Enums;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Tenderfoot.Database;

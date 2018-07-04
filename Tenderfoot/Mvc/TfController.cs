@@ -29,31 +29,29 @@ namespace Tenderfoot.Mvc
             this.Response.StatusCode = (int)HttpStatusCode.NotFound;
             return new JsonResult(null);
         }
-
-        public void Initiate<Model>(bool authorize = true) where Model : TfModel, new()
+        
+        protected void Initiate<Model>(bool authorize = false) where Model : TfModel, new()
         {
             try
             {
                 this.Initiated = true;
-
                 if (!this.Authorize(authorize))
                 {
                     this.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     return;
                 }
-
-                if (this.ModelObject == null)
+                this.GetTempModel();
+                if (this.Model == null)
                 {
                     var obj = Activator.CreateInstance(typeof(Model));
                     this.GetBody(obj);
                     this.GetQueries(obj);
-                    this.ModelObject = this.ModelDictionary.ToClass<Model>();
+                    this.Model = this.ModelDictionary.ToClass<Model>();
                 }
-
                 this.GetNecessities();
-                this.ModelObject.BeforeStartUp();
+                this.Model.BeforeStartUp();
                 this.ValidateModel();
-                this.ModelObject.OnStartUp();
+                this.Model.OnStartUp();
             }
             catch (Exception ex) when (!TfSettings.System.Debug)
             {
@@ -62,29 +60,38 @@ namespace Tenderfoot.Mvc
             }
         }
 
-        public void Upload(TfUploadModel model, bool authorize = true)
+        protected void Upload(TfUploadModel model, bool authorize = false)
         {
-            this.ModelObject = model;
+            this.Model = model;
             this.Initiate<TfUploadModel>(authorize);
+        }
+
+        protected void SetModel()
+        {
+            this.TempData["StoredModel"] = this.Model;
+        }
+
+        private void GetTempModel()
+        {
+            if (TempData["StoredModel"] != null &&
+                TempData["StoredModel"] is TfModel)
+            {
+                this.Model = (TfModel)this.TempData["StoredModel"];
+            }
         }
 
         private void ValidateModel()
         {
             var validationDictionary = new Dictionary<string, object>();
-
             var controllerType = this.GetType();
-            if (controllerType.GetCustomAttribute<GetSessionAttribute>() is GetSessionAttribute)
+            if (controllerType.GetCustomAttribute<GetSessionAttribute>() != null)
             {
-                this.ModelObject.GetSessionCookies();
+                this.Model.GetSessionCookies();
             }
-
-            this.ValidateProperties(this.ModelObject, ref validationDictionary);
-
-            var checkSessionAttribute = controllerType.GetCustomAttribute<CheckActiveSessionAttribute>() as CheckActiveSessionAttribute;
-            if (checkSessionAttribute != null)
+            this.ValidateProperties(this.Model, ref validationDictionary);
+            if (controllerType.GetCustomAttribute<CheckActiveSessionAttribute>() != null)
             {
-                var validate = this.ModelObject.ValidateSession() as ValidationResult;
-                if (validate != null)
+                if (this.Model.ValidateSession() is ValidationResult validate)
                 {
                     foreach (var memberName in validate.MemberNames)
                     {
@@ -92,31 +99,30 @@ namespace Tenderfoot.Mvc
                     }
                 }
             }
-            
-            if (this.ModelObject.Validate() is IEnumerable<ValidationResult> validationResults)
+            if (this.Model.Validate() is IEnumerable<ValidationResult> validationResults)
             {
                 foreach (var result in validationResults)
                 {
-                    if (result == null)
+                    this.AddModelErrors(result.MemberNames?.ToArray(), result, ref validationDictionary);
+                }
+            }
+            if (this.Model.HasLibrary)
+            {
+                if (this.Model.AutoValidate() is IEnumerable<ValidationResult> autoValidationResults)
+                {
+                    foreach (var result in autoValidationResults)
                     {
-                        continue;
-                    }
-
-                    foreach (var memberName in result.MemberNames)
-                    {
-                        this.AddModelErrors(memberName, result, ref validationDictionary);
+                        this.AddModelErrors(result.MemberNames?.ToArray(), result, ref validationDictionary);
                     }
                 }
             }
-
-            var returnDictionary = new Dictionary<string, object>();
+            var modelDictionary = new Dictionary<string, object>();
             if (validationDictionary.Count() > 0)
             {
-                returnDictionary.Add("is_valid", false);
-                returnDictionary.Add("messages", validationDictionary);
+                modelDictionary.Add("is_valid", false);
+                modelDictionary.Add("messages", validationDictionary);
             }
-
-            this.JsonResult = base.Json(returnDictionary, this.JsonSettings);
+            this.JsonModel = base.Json(modelDictionary, this.JsonSettings);
         }
 
         private void ValidateProperties(dynamic model, ref Dictionary<string, object> validationDictionary)
@@ -125,7 +131,6 @@ namespace Tenderfoot.Mvc
             {
                 return;
             }
-
             var properties = model.GetType().GetProperties();
             foreach (PropertyInfo property in properties)
             {
@@ -133,13 +138,11 @@ namespace Tenderfoot.Mvc
                 {
                     continue;
                 }
-
                 if (property.PropertyType.GetConstructor(Type.EmptyTypes) != null &&
                     !property.PropertyType.GetType().IsAbstract)
                 {
                     this.ValidateProperties(property.GetValue(model), ref validationDictionary);
                 }
-
                 var isValidated = false;
                 foreach (var attribute in property.GetCustomAttributes(false))
                 {
@@ -147,55 +150,13 @@ namespace Tenderfoot.Mvc
                     {
                         break;
                     }
-
                     var value = property.GetValue(model);
-
-                    if (attribute is RequireInputAttribute)
+                    if (attribute is RequireInputAttribute ||
+                        attribute is InputAttribute)
                     {
-                        var attr = attribute as RequireInputAttribute;
-                        var result = TfValidationResult.FieldRequired(property.Name, value);
-                        if (attr.Method != null)
-                        {
-                            if (attr.Method.ToList().Contains(this.ModelObject.Method))
-                            {
-                                if (result != null)
-                                {
-                                    this.AddModelErrors(property.Name, result, ref validationDictionary);
-                                    isValidated = true;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (result != null)
-                            {
-                                this.AddModelErrors(property.Name, result, ref validationDictionary);
-                                isValidated = true;
-                            }
-                        }
-                    }
-
-                    if (attribute is InputAttribute && value != null)
-                    {
-                        var inputAttribute = attribute as InputAttribute;
-                        if (inputAttribute.InputType.HasValue)
-                        {
-                            var result = TfValidationResult.Input(inputAttribute.InputType.Value, value, property.Name);
-                            if (result != null)
-                            {
-                                this.AddModelErrors(property.Name, result, ref validationDictionary);
-                                isValidated = true;
-                            }
-                        }
-                        if (inputAttribute.Length.HasValue)
-                        {
-                            var result = TfValidationResult.Length(inputAttribute.Length.Value, value, property.Name);
-                            if (result != null)
-                            {
-                                this.AddModelErrors(property.Name, result, ref validationDictionary);
-                                isValidated = true;
-                            }
-                        }
+                        var attr = attribute as BaseAttribute;
+                        var result = attr.Validate(property.Name, value, this.Model.Method, ref isValidated);
+                        this.AddModelErrors(property.Name, result, ref validationDictionary);
                     }
                 }
             }
@@ -203,9 +164,8 @@ namespace Tenderfoot.Mvc
         
         private void BuildModelDictionary()
         {
-            var jsonDictionary = new Dictionary<string, object>();
-            var properties = this.ModelObject.GetType().GetProperties();
-            
+            var modelDictionary = new Dictionary<string, object>();
+            var properties = this.Model.GetType().GetProperties();
             foreach (var property in properties)
             {
                 var attributes = property.GetCustomAttributes(false);
@@ -214,44 +174,41 @@ namespace Tenderfoot.Mvc
                 {
                     if (attribute is OutputAttribute)
                     {
-                        var value = property.GetValue(this.ModelObject);
+                        var value = property.GetValue(this.Model);
 
                         if (value != null)
                         {
-                            jsonDictionary.Add(StringExtensions.ToUnderscore(property.Name), value);
+                            modelDictionary.Add(StringExtensions.ToUnderscore(property.Name), value);
                         }
                     }
                 }
             }
-
-            jsonDictionary.Add("is_valid", true);
-            jsonDictionary.Add("messages", string.Empty);
-
-            this.JsonResult = base.Json(jsonDictionary, this.JsonSettings);
-            this.DictionaryResult = jsonDictionary;
+            modelDictionary.Add("is_valid", true);
+            modelDictionary.Add("messages", string.Empty);
+            this.JsonModel = base.Json(modelDictionary, this.JsonSettings);
+            this.ViewModel = modelDictionary;
         }
 
         [NonAction]
-        public JsonResult Conclude()
+        protected JsonResult Conclude()
         {
             if (!this.Initiated)
             {
-                return this.JsonResult;
+                return this.JsonModel;
             }
-
             try
             {
-                if (this.ModelObject != null &&
-                    this.ModelObject.Stop == false &&
+                if (this.Model != null &&
+                    this.Model.Stop == false &&
                     this.ModelState.IsValid)
                 {
-                    if (this.ModelObject.Mapping)
+                    if (this.Model.Mapping)
                     {
-                        this.ModelObject.MapModel();
+                        this.Model.MapModel();
                     }
-                    if (this.ModelObject.Handling)
+                    if (this.Model.Handling)
                     {
-                        this.ModelObject.HandleModel();
+                        this.Model.HandleModel();
                     }
                     this.BuildModelDictionary();
                     this.Response.StatusCode = (int)HttpStatusCode.OK;
@@ -266,12 +223,11 @@ namespace Tenderfoot.Mvc
                 this.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 TfDebug.WriteLog(ex);
             }
-            
-            return this.JsonResult;
+            return this.JsonModel;
         }
 
         [NonAction]
-        public JsonResult Validate()
+        protected JsonResult Validate()
         {
             if (this.ModelState.IsValid)
             {
@@ -282,11 +238,11 @@ namespace Tenderfoot.Mvc
             {
                 this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             }
-            return this.JsonResult;
+            return this.JsonModel;
         }
 
         [NonAction]
-        public ActionResult GetFile(string path, string name, string contentType)
+        protected ActionResult GetFile(string path, string name, string contentType)
         {
             var fullPath = IO.Path.Combine(path, name);
             if (IO.File.Exists(fullPath))
@@ -297,32 +253,29 @@ namespace Tenderfoot.Mvc
         }
         
         [NonAction]
-        public new ActionResult View(string viewName)
+        protected ActionResult Page(string viewName)
         {
             this.Conclude();
-            if (this.ModelState.IsValid)
+            var actionName = Convert.ToString(this.ControllerContext.RouteData.Values["action"]);
+            if (!actionName.IsEmpty())
             {
-                var actionName = Convert.ToString(this.ControllerContext.RouteData.Values["action"]);
-                if (!actionName.IsEmpty())
+                if (this.ViewModel == null)
                 {
-                    var property = this.GetType().GetMethod(actionName);
-                    if (property != null)
+                    this.ViewModel = (new DefaultModel()).ToDictionary();
+                }
+                this.ViewModel.Add("site_url", TfSettings.Web.SiteUrl);
+                this.ViewModel.Add("api_url", TfSettings.Web.ApiUrl);
+                object modelObject = this.ViewModel.ToDynamic();
+                var property = this.GetType().GetMethod(actionName);
+                if (property != null)
+                {
+                    if (property.GetCustomAttribute<ViewAttribute>() is ViewAttribute attribute)
                     {
-                        var attribute = property.GetCustomAttribute<ViewAttribute>();
-                        if (attribute != null)
-                        {
-                            this.ViewBag.BodyView = viewName;
-                            viewName = (attribute as ViewAttribute).ViewName;
-                        }
+                        this.ViewBag.Body = base.View(viewName, modelObject).ToHtml(this.HttpContext);
+                        viewName = attribute.ViewName;
                     }
                 }
-                if (this.DictionaryResult == null)
-                {
-                    this.DictionaryResult = (new DefaultModel()).ToDictionary();
-                }
-                this.DictionaryResult.Add("site_url", TfSettings.Web.SiteUrl);
-                this.DictionaryResult.Add("api_url", TfSettings.Web.ApiUrl);
-                return base.View(viewName, this.DictionaryResult);
+                return base.View(viewName, modelObject);
             }
             return NotFound();
         }

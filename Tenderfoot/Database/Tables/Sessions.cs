@@ -4,13 +4,13 @@ namespace Tenderfoot.Database.Tables
 {
     public class Sessions : TfEntity
     {
-        [NotNull]
         [Encrypt]
+        [NotNull]
         [Length(100)]
         public string session_id { get; set; }
 
-        [NotNull]
         [Encrypt]
+        [NotNull]
         [Length(100)]
         public string session_key { get; set; }
 

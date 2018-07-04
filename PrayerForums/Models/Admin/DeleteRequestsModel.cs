@@ -1,25 +1,23 @@
-﻿using PrayerForums.Library.Database;
-using PrayerForums.Library.Function;
-using PrayerForums.Models.Prayer;
+﻿using PrayerForumsLibrary;
+using PrayerForumsLibrary.Database;
+using PrayerForumsLibrary.Interfaces;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Tenderfoot.Mvc;
 
 namespace PrayerForums.Models.Admin
 {
-    public class DeleteRequestsModel : TfModel
+    public class DeleteRequestsModel : TfModel, IGetDetailsBase
     {
         [Input(InputType.Numeric)]
         [RequireInput]
         public int? RequestId { get; set; }
-        
+
+        public Requests Requests { get; set; }
+
         public override IEnumerable<ValidationResult> Validate()
         {
-            var getDetailsModel = new GetDetailsModel
-            {
-                RequestId = this.RequestId
-            };
-            yield return new GetDetailsLibrary().ValidateRequestId(getDetailsModel);
+            yield return new GetDetailsLibrary().ValidateRequestId(this);
         }
 
         public override void HandleModel()

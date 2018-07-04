@@ -1,6 +1,6 @@
-﻿using PrayerForums.Library.Database;
-using PrayerForums.Library.Function;
-using PrayerForums.Models.Prayer.Interface;
+﻿using PrayerForumsLibrary;
+using PrayerForumsLibrary.Database;
+using PrayerForumsLibrary.Interfaces;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Tenderfoot.Mvc;

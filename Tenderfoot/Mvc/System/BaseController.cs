@@ -18,16 +18,17 @@ namespace Tenderfoot.Mvc.System
 {
     public class BaseController : Controller
     {
-        protected dynamic ModelObject { get; set; }
+        protected bool IsValid => this.ModelState.IsValid;
+        protected TfModel Model { get; set; }
         protected JsonSerializerSettings JsonSettings = new JsonSerializerSettings { Formatting = Formatting.Indented };
-        protected JsonResult JsonResult { get; set; }
+        protected JsonResult JsonModel { get; set; }
         protected Dictionary<string, object> ModelDictionary { get; set; } = new Dictionary<string, object>();
-        protected Dictionary<string, object> DictionaryResult { get; set; }
+        protected Dictionary<string, object> ViewModel { get; set; }
         protected Dictionary<string, object> Messages
         {
             get
             {
-                var dictionary = JsonResult.Value as Dictionary<string, object>;
+                var dictionary = JsonModel.Value as Dictionary<string, object>;
                 return dictionary?["messages"] as Dictionary<string, object>;
             }
         }
@@ -74,8 +75,8 @@ namespace Tenderfoot.Mvc.System
         protected void GetNecessities()
         {
             Enum.TryParse(this.Request.Method, out HttpMethod httpMethod);
-            this.ModelObject.Method = httpMethod;
-            this.ModelObject.Controller = this;
+            this.Model.Method = httpMethod;
+            this.Model.Controller = this;
         }
 
         protected void GetBody(object obj)
@@ -116,6 +117,19 @@ namespace Tenderfoot.Mvc.System
             }
         }
 
+        protected void AddModelErrors(string[] names, ValidationResult result, ref Dictionary<string, object> validationDictionary)
+        {
+            if (result == null)
+            {
+                return;
+            }
+
+            foreach (var name in names)
+            {
+                this.AddModelErrors(name, result, ref validationDictionary);
+            }
+        }
+
         protected void AddModelErrors(string name, ValidationResult result, ref Dictionary<string, object> validationDictionary)
         {
             if (result == null)
@@ -135,7 +149,7 @@ namespace Tenderfoot.Mvc.System
             }
 
             this.ControllerContext.ModelState.AddModelError(name, result.ErrorMessage);
-            this.ModelObject.InvalidFields.Add(name);
+            this.Model.InvalidFields.Add(name);
         }
 
         private bool Unauthorize()
@@ -151,7 +165,7 @@ namespace Tenderfoot.Mvc.System
                     { "message", new Dictionary<string, object>{ { validationError.MemberNames.First(), validationError.ErrorMessage } } }
                 };
 
-            this.JsonResult = base.Json(jsonDictionary, this.JsonSettings);
+            this.JsonModel = base.Json(jsonDictionary, this.JsonSettings);
 
             return false;
         }

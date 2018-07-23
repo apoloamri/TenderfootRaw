@@ -103,6 +103,10 @@ namespace Tenderfoot.Mvc
             {
                 foreach (var result in validationResults)
                 {
+                    if (result == null)
+                    {
+                        continue;
+                    }
                     this.AddModelErrors(result.MemberNames?.ToArray(), result, ref validationDictionary);
                 }
             }

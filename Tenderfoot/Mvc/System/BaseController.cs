@@ -239,14 +239,11 @@ namespace Tenderfoot.Mvc.System
 
                         if (isValidJson && JToken.Parse(jsonString) is JArray)
                         {
-                            var itemType = 
-                                type.IsArray ? 
-                                type.GetGenericArguments()[0] :
-                                type;
-                            
-                            if (itemType.GetConstructor(Type.EmptyTypes) != null &&
-                                !itemType.IsAbstract)
+                            if (type.IsArray && 
+                                type.GetConstructor(Type.EmptyTypes) != null && 
+                                !type.IsAbstract)
                             {
+                                var itemType = type.GetGenericArguments()[0];
                                 var objectClass = Activator.CreateInstance(itemType);
                                 var list = new List<Dictionary<string, object>>();
 

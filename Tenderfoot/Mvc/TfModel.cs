@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using Tenderfoot.TfSystem;
+using Tenderfoot.Tools.Extensions;
 
 namespace Tenderfoot.Mvc
 {
@@ -145,8 +146,14 @@ namespace Tenderfoot.Mvc
 
         public void GetSessionCookies()
         {
-            this.SessionId = this.Controller.ControllerContext.HttpContext.Request.Cookies["session_id"];
-            this.SessionKey = this.Controller.ControllerContext.HttpContext.Request.Cookies["session_key"];
+            if (this.SessionId.IsEmpty())
+            {
+                this.SessionId = this.Controller.ControllerContext.HttpContext.Request.Cookies["session_id"];
+            }
+            if (this.SessionKey.IsEmpty())
+            {
+                this.SessionKey = this.Controller.ControllerContext.HttpContext.Request.Cookies["session_key"];
+            }
         }
 
         public void SetSessionCookies()

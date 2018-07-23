@@ -2,12 +2,12 @@
 {
     public class Emails : TfEntity
     {
-        [NotNull]
         [Length(100)]
+        [NotNull]
         public string mail_from { get; set; }
 
-        [NotNull]
         [Length(100)]
+        [NotNull]
         public string mail_to { get; set; }
 
         [NotNull]

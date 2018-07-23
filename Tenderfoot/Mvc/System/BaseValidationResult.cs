@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text.RegularExpressions;
+using Tenderfoot.Tools.Extensions;
 
 namespace Tenderfoot.Mvc.System
 {
@@ -113,6 +114,10 @@ namespace Tenderfoot.Mvc.System
 
         private static ValidationResult Validate(string pattern, object value, string[] memberNames)
         {
+            if (value == null || value.ToString().IsEmpty())
+            {
+                return null;
+            }
             var regex = new Regex(pattern, RegexOptions.IgnoreCase);
             if (!regex.IsMatch(value?.ToString() ?? ""))
             {

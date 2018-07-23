@@ -14,49 +14,103 @@ namespace Tenderfoot.Tools
         private static dynamic GetObject(this Dictionary<string, object> dictionary, Type type)
         {
             dynamic model = Activator.CreateInstance(type);
-
             foreach (var keyValue in dictionary)
             {
                 var property = type.GetProperty(keyValue.Key);
-
                 if (property == null)
                 {
                     continue;
                 }
-
                 object value = keyValue.Value;
-
                 if (value.IsDictionary())
                 {
                     value = GetObject((Dictionary<string, object>)value, property.PropertyType);
                 }
                 else if (value.IsList())
                 {
-                    dynamic dynamicList = Activator.CreateInstance(property.PropertyType);
-                    var itemType = property.PropertyType.GetGenericArguments()[0];
-                    
-                    if (value is List<Dictionary<string, object>>)
+                    dynamic dynamicList;
+                    if (property.PropertyType.GetConstructor(Type.EmptyTypes) != null)
                     {
-                        foreach (var item in value as List<Dictionary<string, object>>)
+                        dynamicList = Activator.CreateInstance(property.PropertyType);
+                        var itemType = property.PropertyType.GetGenericArguments()[0];
+                        if (value is List<Dictionary<string, object>>)
                         {
-                            dynamicList.Add(GetObject(item, itemType));
+                            foreach (var item in value as List<Dictionary<string, object>>)
+                            {
+                                dynamicList.Add(GetObject(item, itemType));
+                            }
                         }
                     }
-                    else if (value is List<dynamic>)
+                    else
                     {
-                        foreach (var item in value as List<dynamic>)
+                        if (property.PropertyType == typeof(String[]))
                         {
-                            dynamicList.Add(item);
+                            dynamicList = new List<string>();
+                        }
+                        else if (property.PropertyType == typeof(Int32[]))
+                        {
+                            dynamicList = new List<int>();
+                        }
+                        else
+                        {
+                            dynamicList = new List<dynamic>();
+                        }
+                        if (value is List<dynamic>)
+                        {
+                            foreach (var item in value as List<dynamic>)
+                            {
+                                dynamicList.Add(item);
+                            }
                         }
                     }
-                    
-                    value = dynamicList;
+                    if (typeof(IEnumerable<dynamic>).IsAssignableFrom(property.PropertyType))
+                    {
+                        if (property.PropertyType == typeof(String[]))
+                        {
+                            var valueList = (dynamicList as List<string>);
+                            if (valueList.Count == 0)
+                            {
+                                value = null;
+                            }
+                            else
+                            {
+                                value = valueList.ToArray();
+                            }
+                        }
+                        else if (property.PropertyType == typeof(Int32[]))
+                        {
+                            var valueList = (dynamicList as List<int>);
+                            if (valueList.Count == 0)
+                            {
+                                value = null;
+                            }
+                            else
+                            {
+                                value = valueList.ToArray();
+                            }
+                        }
+                        else
+                        {
+                            var valueList = (dynamicList as List<dynamic>);
+                            if (valueList.Count == 0)
+                            {
+                                value = null;
+                            }
+                            else
+                            {
+                                value = valueList.ToArray();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        value = dynamicList;
+                    }
                 }
                 else if (value.GetType().IsNullableEnum())
                 {
                     value = (Enum)value;
                 }
-                
                 try
                 {
                     property.SetValue(model, TfConvert.ChangeType(value, property.PropertyType), null);

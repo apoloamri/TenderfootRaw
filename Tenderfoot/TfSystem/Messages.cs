@@ -37,7 +37,7 @@ namespace Tenderfoot.TfSystem
                     fields.Add(fieldName);
                 }
 
-                return string.Format(defaultMessage, fields.ToArray());
+                return string.Format(defaultMessage, fields?.ToArray() ?? new[] { "" });
             }
 
             return

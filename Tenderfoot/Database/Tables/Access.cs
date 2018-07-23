@@ -4,12 +4,12 @@ namespace Tenderfoot.Database.Tables
 {
     public class Accesses : TfEntity
     {
-        [NotNull]
         [Length(100)]
+        [NotNull]
         public string key { get; set; }
 
-        [NotNull]
         [Length(100)]
+        [NotNull]
         public string secret { get; set; }
 
         [NotNull]
